@@ -81,15 +81,15 @@ export class GridRenderer {
     const cameraX = this.camera.x;
 
     // We need half of the width because the center of the camera is in the middle of the canvas
-    const halfWidthOfCanvas = this.canvas.width / 2;
+    const halfWidthOfCanvas = this.canvas.width / 2 - cameraX;
 
     // This offset allows us to draw the grid like the user would expect, otherwise it would always be aligned to the left
     const canvasGridOffset =
       (halfWidthOfCanvas + cameraX * unitsApart) % unitsApart;
 
-    const columnsToDraw = Math.floor(this.canvas.width / unitsApart) * 2;
+    const columnsToDraw = Math.floor(this.canvas.width / unitsApart);
 
-    for (let i = 0; i < columnsToDraw; ++i) {
+    for (let i = 0; i <= columnsToDraw; ++i) {
       let fromx = unitsApart * i + canvasGridOffset;
       fromx += Number.isInteger(fromx) ? this.drawOffset : 0;
       const fromy = 0;
@@ -109,15 +109,15 @@ export class GridRenderer {
     const cameraY = this.camera.y;
 
     // We need half of the height because the center of the camera is in the middle of the canvas
-    const halfHeightOfCanvas = this.canvas.height / 2;
+    const halfHeightOfCanvas = this.canvas.height / 2 - cameraY;
 
     // This offset allows us to draw the grid like the user would expect, otherwise it would always be aligned to the left
     const canvasGridOffset =
       (halfHeightOfCanvas + cameraY * unitsApart) % unitsApart;
 
-    const rowsToDraw = Math.floor(this.canvas.height / unitsApart) * 2;
+    const rowsToDraw = Math.floor(this.canvas.height / unitsApart);
 
-    for (let i = 0; i < rowsToDraw; ++i) {
+    for (let i = 0; i <= rowsToDraw; ++i) {
       let fromy = unitsApart * i + canvasGridOffset;
       fromy += Number.isInteger(fromy) ? this.drawOffset : 0;
       const fromx = 0;
