@@ -1,29 +1,5 @@
-# factoraction
+# Factoriaction
 
-## Project setup
-```
-yarn install
-```
+Plan your factories in browser!
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
-
-### Compiles and minifies for production
-```
-yarn build
-```
-
-### Run your unit tests
-```
-yarn test:unit
-```
-
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+Theme inspired/stolen from [Brittany Chiang](https://halcyon-theme.netlify.app/).
