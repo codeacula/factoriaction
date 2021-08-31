@@ -1,5 +1,5 @@
 <template lang="pug">
-.app-wrapper
+.app-wrapper.full-size
   nav.navigation
     router-link(:to="{ name: 'Home' }") Home
     router-link(:to="{ name: 'About' }") About
@@ -11,21 +11,17 @@
 
 .app-wrapper {
   display: grid;
+  grid-template-columns: [site-start] auto [site-end];
   grid-template-rows: [row-start navigation-start] 1.5rem [navigation-end content-start] auto [content-end row-end];
-  height: 100%;
-  width: 100%;
 
   & > .main-content {
-    display: flex;
-    height: 100%;
+    grid-column: site-start / site-end;
     grid-row: content-start / content-end;
-    width: 100%;
   }
 
   & > .navigation {
+    grid-column: site-start / site-end;
     grid-row: navigation-start / navigation-end;
-    height: 100%;
-    width: 100%;
   }
 }
 
