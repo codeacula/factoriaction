@@ -1,0 +1,20 @@
+@import "variables";
+@import "reset";
+
+body {
+  background-color: $dark-1;
+  color: $dark-7;
+}
+
+a {
+  color: $orange;
+
+  &:hover {
+    color: $purple;
+  }
+}
+
+#app {
+  height: 100vh;
+  width: 100vw;
+}
