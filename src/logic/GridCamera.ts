@@ -31,10 +31,19 @@ export class GridCamera {
     this._y += this.movementIncrement;
   }
 
-  public down(): void {
+  public down(offset?: { x: number; y: number }): void {
+    const oldZ = this._z;
     const newZ = this._z + this.movementIncrement;
-    console.log("These stairs go down!", newZ);
     this._z = Math.min(newZ, this.zoomFloor);
+
+    if (oldZ == this._z) {
+      return;
+    }
+
+    if (offset) {
+      this._x -= offset.x;
+      this._y -= offset.y;
+    }
   }
 
   public left(): void {
@@ -58,8 +67,18 @@ export class GridCamera {
     this.dragCameraStartY = this._y;
   }
 
-  public up(): void {
+  public up(offset?: { x: number; y: number }): void {
+    const oldZ = this._z;
     const newZ = this._z - this.movementIncrement;
     this._z = Math.max(newZ, this.zoomCeiling);
+
+    if (oldZ == this._z) {
+      return;
+    }
+
+    if (offset) {
+      this._x += offset.x;
+      this._y += offset.y;
+    }
   }
 }

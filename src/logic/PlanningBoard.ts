@@ -38,9 +38,9 @@ export class PlanningBoard {
 
     this.providedCanvas.addEventListener("wheel", (ev: WheelEvent) => {
       if (ev.deltaY < 0) {
-        this.gridCamera.down();
+        this.gridCamera.down({ x: ev.offsetX, y: ev.offsetY });
       } else {
-        this.gridCamera.up();
+        this.gridCamera.up({ x: ev.offsetX, y: ev.offsetY });
       }
 
       this.gridRenderer.render();
