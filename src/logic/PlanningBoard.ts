@@ -20,8 +20,20 @@ export class PlanningBoard {
       console.log("Key down", ev);
     });
 
+    this.providedCanvas.addEventListener("mousedown", (ev: MouseEvent) => {
+      this.gridCamera.startDragging(ev.offsetX, ev.offsetY);
+      this.isDraggingCamera = true;
+    });
+
     this.providedCanvas.addEventListener("mousemove", (ev: MouseEvent) => {
-      console.log("Mouse event", ev);
+      if (this.isDraggingCamera) {
+        this.gridCamera.mouseDragged(ev.offsetX, ev.offsetY);
+        this.gridRenderer.render();
+      }
+    });
+
+    this.providedCanvas.addEventListener("mouseup", () => {
+      this.isDraggingCamera = false;
     });
 
     this.providedCanvas.addEventListener("wheel", (ev: WheelEvent) => {
@@ -42,12 +54,14 @@ export class PlanningBoard {
     }
 
     this.fitCanvasToParent();
+    this.gridRenderer.updateCenter();
     this.gridRenderer.render();
   }
 
   private canvasParent: HTMLElement | null;
   private gridCamera: GridCamera;
   private gridRenderer: GridRenderer;
+  private isDraggingCamera = false;
   private planningGrid: PlanningGrid;
   private providedCanvas: HTMLCanvasElement;
 

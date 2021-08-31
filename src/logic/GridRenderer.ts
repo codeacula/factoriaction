@@ -133,6 +133,7 @@ export class GridRenderer {
    */
   public render(): void {
     this.clear();
+    console.log("Camera is at ", { x: this.camera.x, y: this.camera.y });
     this.drawGrid(1, "#2f3b54");
     this.drawGrid(8, "#8695b7");
   }

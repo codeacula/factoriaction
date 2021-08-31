@@ -1,4 +1,9 @@
 export class GridCamera {
+  private dragCameraStartX = 0;
+  private dragCameraStartY = 0;
+  private dragCursorStartX = 0;
+  private dragCursorStartY = 0;
+
   private movementIncrement = 0.5;
   private zoomCeiling = 0.5;
   private zoomFloor = 6;
@@ -36,8 +41,21 @@ export class GridCamera {
     this._x -= this.movementIncrement;
   }
 
+  public mouseDragged(dragX: number, dragY: number) {
+    this._x = this.dragCameraStartX + (this.dragCursorStartX - dragX);
+    this._y = this.dragCameraStartY + (this.dragCursorStartY - dragY);
+  }
+
   public right(): void {
     this._x += this.movementIncrement;
+  }
+
+  public startDragging(startX: number, startY: number) {
+    this.dragCursorStartX = startX;
+    this.dragCursorStartY = startY;
+
+    this.dragCameraStartX = this._x;
+    this.dragCameraStartY = this._y;
   }
 
   public up(): void {
