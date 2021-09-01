@@ -1,0 +1,1415 @@
+[
+  {
+    "name": "Assembler",
+    "width": 10,
+    "length": 15,
+    "height": 10,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "AWSOME Shop",
+    "width": 4,
+    "length": 6,
+    "height": 5,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "AWSOME Sink",
+    "width": 16,
+    "length": 13,
+    "height": 24,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Biomass Burner",
+    "width": 8,
+    "length": 8,
+    "height": 7,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Blender",
+    "width": 18,
+    "length": 16,
+    "height": 15,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Ceiling Light",
+    "width": 12,
+    "length": 12,
+    "height": 1,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Center Door Wall (Plating)",
+    "width": 8,
+    "length": 1,
+    "height": 4,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Center Door Wall (Sheet Metal)",
+    "width": 8,
+    "length": 1,
+    "height": 4,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Coal Generator",
+    "width": 10,
+    "length": 26,
+    "height": 36,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Constructor",
+    "width": 8,
+    "length": 10,
+    "height": 8,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Conveyor Belt Mk.1",
+    "width": 2,
+    "length": 1,
+    "height": 1,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Conveyor Belt Mk.2",
+    "width": 2,
+    "length": 1,
+    "height": 1,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Conveyor Belt Mk.3",
+    "width": 2,
+    "length": 1,
+    "height": 1,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Conveyor Belt Mk.4",
+    "width": 2,
+    "length": 1,
+    "height": 1,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Conveyor Belt Mk.5",
+    "width": 2,
+    "length": 1,
+    "height": 1,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Conveyor Lift Mk.1",
+    "width": 2,
+    "length": 2,
+    "height": 7,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Conveyor Lift Mk.2",
+    "width": 2,
+    "length": 2,
+    "height": 7,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Conveyor Lift Mk.3",
+    "width": 2,
+    "length": 2,
+    "height": 7,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Conveyor Lift Mk.4",
+    "width": 2,
+    "length": 2,
+    "height": 7,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Conveyor Lift Mk.5",
+    "width": 2,
+    "length": 2,
+    "height": 7,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Conveyor Merger",
+    "width": 4,
+    "length": 4,
+    "height": 3,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Conveyor Pole",
+    "width": 2,
+    "length": 1,
+    "height": 1,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Conveyor Splitter",
+    "width": 4,
+    "length": 4,
+    "height": 3,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Conveyor Wall Mount",
+    "width": 2,
+    "length": 1,
+    "height": 1,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Craft Bench",
+    "width": 6,
+    "length": 3,
+    "height": 3,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Drone Port",
+    "width": 24,
+    "length": 24,
+    "height": 15,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Empty Platform",
+    "width": 30,
+    "length": 16,
+    "height": 1,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Fluid Buffer",
+    "width": 6,
+    "length": 6,
+    "height": 8,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Fluid Freight Platform",
+    "width": 30,
+    "length": 16,
+    "height": 20,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Foundry",
+    "width": 10,
+    "length": 9,
+    "height": 9,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Freight Platform",
+    "width": 32,
+    "length": 16,
+    "height": 20,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Fuel Generator",
+    "width": 20,
+    "length": 20,
+    "height": 27,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Industrial Fluid Buffer",
+    "width": 14,
+    "length": 14,
+    "height": 12,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Industrial Storage Container",
+    "width": 5,
+    "length": 10,
+    "height": 8,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Manufacturer",
+    "width": 18,
+    "length": 19,
+    "height": 12,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Miner Mk.1",
+    "width": 6,
+    "length": 14,
+    "height": 18,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Miner Mk.2",
+    "width": 6,
+    "length": 14,
+    "height": 18,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Miner Mk.3",
+    "width": 6,
+    "length": 14,
+    "height": 18,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Nuclear Power Plant",
+    "width": 38,
+    "length": 43,
+    "height": 49,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Oil Extractor",
+    "width": 12,
+    "length": 20,
+    "height": 20,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Packager",
+    "width": 8,
+    "length": 8,
+    "height": 12,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Particle Accelerator",
+    "width": 24,
+    "length": 38,
+    "height": 32,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Pipeline Junction Cross",
+    "width": 4,
+    "length": 4,
+    "height": 2,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Pipeline Mk.1",
+    "width": 2,
+    "length": 1,
+    "height": 2,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Pipeline Mk.2",
+    "width": 2,
+    "length": 1,
+    "height": 2,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Pipeline Pump Mk.1",
+    "width": 2,
+    "length": 4,
+    "height": 2,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Pipeline Pump Mk.2",
+    "width": 2,
+    "length": 5,
+    "height": 2,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Pipeline Support",
+    "width": 2,
+    "length": 1,
+    "height": 1,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Double Ramp 8m x 2m",
+    "width": 8,
+    "length": 8,
+    "height": 2,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Double Ramp 8m x 4m",
+    "width": 8,
+    "length": 8,
+    "height": 4,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Double Ramp 8m x 8m",
+    "width": 8,
+    "length": 8,
+    "height": 8,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Double Wall Outlet Mk.1",
+    "width": 1,
+    "length": 1,
+    "height": 1,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Double Wall Outlet Mk.2",
+    "width": 1,
+    "length": 1,
+    "height": 1,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Double Wall Outlet Mk.3",
+    "width": 1,
+    "length": 1,
+    "height": 1,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Down Corner 8m x 1m Inverted",
+    "width": 8,
+    "length": 8,
+    "height": 1,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Down Corner 8m x 2m Inverted",
+    "width": 8,
+    "length": 8,
+    "height": 2,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Down Corner 8m x 4m Inverted",
+    "width": 8,
+    "length": 8,
+    "height": 4,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Down Corner Ramp 8m x 1m",
+    "width": 8,
+    "length": 8,
+    "height": 1,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Down Corner Ramp 8m x 2m",
+    "width": 8,
+    "length": 8,
+    "height": 2,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Down Corner Ramp 8m x 4m",
+    "width": 8,
+    "length": 8,
+    "height": 4,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Electric Locomotive",
+    "width": 6,
+    "length": 16,
+    "height": 6,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Equipment Workshop",
+    "width": 10,
+    "length": 7,
+    "height": 5,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Fence",
+    "width": 8,
+    "length": 1,
+    "height": 1,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Flood Light Tower",
+    "width": 8,
+    "length": 8,
+    "height": 34,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Foundation 8m x 1m",
+    "width": 8,
+    "length": 8,
+    "height": 1,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Foundation 8m x 2m",
+    "width": 8,
+    "length": 8,
+    "height": 2,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Foundation 8m x 4m",
+    "width": 8,
+    "length": 8,
+    "height": 4,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Frame Foundation 8m x 4m",
+    "width": 8,
+    "length": 8,
+    "height": 4,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Frame Window",
+    "width": 8,
+    "length": 1,
+    "height": 4,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Freight Car",
+    "width": 6,
+    "length": 16,
+    "height": 6,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Gate Wall",
+    "width": 8,
+    "length": 1,
+    "height": 4,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Glass Foundation 8m x 1m",
+    "width": 8,
+    "length": 8,
+    "height": 1,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Hyper Tube",
+    "width": 2,
+    "length": 1,
+    "height": 2,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Hyper Tube Entrance",
+    "width": 2,
+    "length": 1,
+    "height": 2,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Hyper Tube Support",
+    "width": 2,
+    "length": 1,
+    "height": 3,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Hyper Tube Wall Hole",
+    "width": 2,
+    "length": 1,
+    "height": 2,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Hyper Tube Wall Support",
+    "width": 2,
+    "length": 1,
+    "height": 2,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Inner-Corner Quarter Pipe",
+    "width": 8,
+    "length": 8,
+    "height": 4,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Inverted Inner-Corner Quarter Pipe",
+    "width": 8,
+    "length": 8,
+    "height": 4,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Inverted Outer-Corner Quarter Pipe",
+    "width": 8,
+    "length": 8,
+    "height": 4,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Inverted Quarter Pipe",
+    "width": 8,
+    "length": 8,
+    "height": 4,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Inverted Ramp 8m x 1m",
+    "width": 8,
+    "length": 8,
+    "height": 1,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Inverted Ramp 8m x 2m",
+    "width": 8,
+    "length": 8,
+    "height": 2,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Inverted Ramp 8m x 4m",
+    "width": 8,
+    "length": 8,
+    "height": 4,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Jump Pad",
+    "width": 6,
+    "length": 6,
+    "height": 6,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Left Door Wall (Plating)",
+    "width": 8,
+    "length": 1,
+    "height": 4,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Left Door Wall (Sheet Metal)",
+    "width": 8,
+    "length": 1,
+    "height": 4,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Lights Control Panel",
+    "width": 1,
+    "length": 2,
+    "height": 3,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Lookout Tower",
+    "width": 9,
+    "length": 9,
+    "height": 24,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "MAM",
+    "width": 5,
+    "length": 9,
+    "height": 6,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Outer-Corner Quarter Pipe",
+    "width": 8,
+    "length": 8,
+    "height": 4,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Panel Window",
+    "width": 8,
+    "length": 1,
+    "height": 4,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Personal Storage Box",
+    "width": 2,
+    "length": 1,
+    "height": 1,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Pillar Base",
+    "width": 8,
+    "length": 8,
+    "height": 4,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Pillar Middle",
+    "width": 4,
+    "length": 4,
+    "height": 4,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Pillar Top",
+    "width": 8,
+    "length": 8,
+    "height": 4,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Pipeline Wall Hole",
+    "width": 2,
+    "length": 1,
+    "height": 2,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Pipeline Wall Support",
+    "width": 2,
+    "length": 1,
+    "height": 2,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Power Line",
+    "width": 0,
+    "length": 1,
+    "height": 0,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Power Pole Mk.1",
+    "width": 1,
+    "length": 1,
+    "height": 7,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Power Pole Mk.2",
+    "width": 1,
+    "length": 1,
+    "height": 8,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Power Pole Mk.3",
+    "width": 1,
+    "length": 1,
+    "height": 9,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Power Storage",
+    "width": 6,
+    "length": 6,
+    "height": 12,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Power Switch",
+    "width": 2,
+    "length": 1,
+    "height": 3,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Programmable Splitter",
+    "width": 4,
+    "length": 4,
+    "height": 3,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Quarter Pipe",
+    "width": 8,
+    "length": 8,
+    "height": 4,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Radar Tower",
+    "width": 10,
+    "length": 10,
+    "height": 118,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Railway",
+    "width": 6,
+    "length": 12,
+    "height": 1,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Ramp 8m x 1m",
+    "width": 8,
+    "length": 8,
+    "height": 1,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Ramp 8m x 2m",
+    "width": 8,
+    "length": 8,
+    "height": 2,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Ramp 8m x 4m",
+    "width": 8,
+    "length": 8,
+    "height": 4,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Refinery",
+    "width": 10,
+    "length": 20,
+    "height": 31,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Reinforced Window",
+    "width": 8,
+    "length": 1,
+    "height": 4,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Resource Well Extractor",
+    "width": 4,
+    "length": 4,
+    "height": 5,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Resource Well Pressurizer",
+    "width": 20,
+    "length": 20,
+    "height": 23,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Right Door Wall (Plating)",
+    "width": 8,
+    "length": 1,
+    "height": 4,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Right Door Wall (Sheet Metal)",
+    "width": 8,
+    "length": 1,
+    "height": 4,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Single Window",
+    "width": 8,
+    "length": 1,
+    "height": 4,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Smart Splitter",
+    "width": 4,
+    "length": 4,
+    "height": 3,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Smelter",
+    "width": 6,
+    "length": 9,
+    "height": 9,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Space Elevator",
+    "width": 54,
+    "length": 54,
+    "height": 118,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Stackable Conveyor Pole",
+    "width": 2,
+    "length": 1,
+    "height": 3,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Stackable Hyper Tube Support",
+    "width": 2,
+    "length": 1,
+    "height": 3,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Stackable Pipeline Support",
+    "width": 1,
+    "length": 2,
+    "height": 4,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Stairs Left",
+    "width": 6,
+    "length": 8,
+    "height": 2,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Stairs Right",
+    "width": 6,
+    "length": 8,
+    "height": 2,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Storage Container",
+    "width": 5,
+    "length": 10,
+    "height": 4,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Street Light",
+    "width": 1,
+    "length": 1,
+    "height": 10,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "The HUB",
+    "width": 14,
+    "length": 26,
+    "height": 28,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Train Station",
+    "width": 32,
+    "length": 16,
+    "height": 20,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Truck Station",
+    "width": 16,
+    "length": 22,
+    "height": 12,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "U-Jelly Landing Pad",
+    "width": 10,
+    "length": 11,
+    "height": 5,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Up Corner 8m x 1m Inverted",
+    "width": 8,
+    "length": 8,
+    "height": 1,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Up Corner 8m x 2m Inverted",
+    "width": 8,
+    "length": 8,
+    "height": 2,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Up Corner 8m x 4m Inverted",
+    "width": 8,
+    "length": 8,
+    "height": 4,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Up Corner Ramp 8m x 1m",
+    "width": 8,
+    "length": 8,
+    "height": 1,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Up Corner Ramp 8m x 2m",
+    "width": 8,
+    "length": 8,
+    "height": 2,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Up Corner Ramp 8m x 4m",
+    "width": 8,
+    "length": 8,
+    "height": 4,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Valve",
+    "width": 2,
+    "length": 2,
+    "height": 2,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Walkway Crossing",
+    "width": 4,
+    "length": 4,
+    "height": 1,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Walkway Ramp",
+    "width": 4,
+    "length": 4,
+    "height": 3,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Walkway Straight",
+    "width": 4,
+    "length": 4,
+    "height": 2,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Walkway T-Crossing",
+    "width": 4,
+    "length": 4,
+    "height": 2,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Walkway Turn",
+    "width": 4,
+    "length": 4,
+    "height": 2,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Wall (Plating)",
+    "width": 8,
+    "length": 1,
+    "height": 4,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Wall (Sheet Metal)",
+    "width": 8,
+    "length": 1,
+    "height": 4,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Wall Conveyor x1 (Plating)",
+    "width": 8,
+    "length": 1,
+    "height": 4,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Wall Conveyor x2 (Plating)",
+    "width": 8,
+    "length": 1,
+    "height": 4,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Wall Conveyor x3 (Plating)",
+    "width": 8,
+    "length": 1,
+    "height": 4,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Wall Conveyor x1 (Sheet Metal)",
+    "width": 8,
+    "length": 1,
+    "height": 4,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Wall Conveyor x2 (Sheet Metal)",
+    "width": 8,
+    "length": 1,
+    "height": 4,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Wall Conveyor x3 (Sheet Metal)",
+    "width": 8,
+    "length": 1,
+    "height": 4,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Wall Mounted Flood Light",
+    "width": 1,
+    "length": 8,
+    "height": 5,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Wall Outlet Mk.1",
+    "width": 1,
+    "length": 1,
+    "height": 1,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Wall Outlet Mk.2",
+    "width": 1,
+    "length": 1,
+    "height": 1,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Wall Outlet Mk.3",
+    "width": 1,
+    "length": 1,
+    "height": 1,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  },
+  {
+    "name": "Water Extractor",
+    "width": 20,
+    "length": 20,
+    "height": 26,
+    "tab": null,
+    "displayOrder": null,
+    "imageName": null
+  }
+]

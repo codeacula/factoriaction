@@ -1,7 +1,13 @@
 <template lang="pug">
 .build-menu
   .build-menu-wrapper
-    h1 Here
+    header
+      .build-menu-icon
+      div Builder
+      .close-button
+    main
+      nav
+        ul
 </template>
 
 <style lang="scss">
