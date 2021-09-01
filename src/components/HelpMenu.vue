@@ -2,6 +2,8 @@
 .help-menu(@click="$emit('close')")
   .help-menu-content
     h1 Factoriaction Help
+    p
+      small Click anywhere to close
     table
       tr
         th Command
@@ -56,10 +58,17 @@ export default defineComponent({
       text-align: center;
     }
 
+    p {
+      color: $yellow;
+      text-align: center;
+    }
+
     table {
+      margin-top: 2rem;
       width: 100%;
 
       th {
+        color: $purple;
         text-align: left;
       }
 
