@@ -3,11 +3,41 @@
   nav.navigation
     router-link(:to="{ name: 'Home' }") Home
     router-link(:to="{ name: 'About' }") About
+    a(href="#", @click="showHelpMenu()") Help
   router-view.main-content
+  HelpMenu(v-show="shouldShowHelpMenu", @close="closeHelpMenu()")
 </template>
 
+<script lang="ts">
+import { defineComponent } from "@vue/runtime-core";
+import { ref } from "vue";
+
+import HelpMenu from "@/components/HelpMenu.vue";
+
+export default defineComponent({
+  name: "App",
+  components: { HelpMenu },
+  setup() {
+    const shouldShowHelpMenu = ref(false);
+
+    const closeHelpMenu = () => {
+      shouldShowHelpMenu.value = false;
+    };
+
+    const showHelpMenu = () => {
+      shouldShowHelpMenu.value = true;
+    };
+    return {
+      closeHelpMenu,
+      showHelpMenu,
+      shouldShowHelpMenu,
+    };
+  },
+});
+</script>
+
 <style lang="scss">
-@import "./sass/main.scss";
+@import "@/sass/main.scss";
 
 .app-wrapper {
   display: grid;
@@ -31,6 +61,7 @@
 
   a {
     display: inline-block;
+    height: calc(1.5rem - 1px);
     padding: 0 1rem;
     text-decoration: none;
     transition: all 0.1s ease-in;

@@ -5,6 +5,9 @@ import { PlanningGrid } from "./PlanningGrid";
 export class PlanningBoard {
   constructor(canvas: HTMLCanvasElement) {
     this.providedCanvas = canvas;
+    this.providedCanvas.oncontextmenu = () => {
+      return false;
+    };
     this.canvasParent = this.providedCanvas.parentElement;
 
     this.gridCamera = new GridCamera();
@@ -21,8 +24,12 @@ export class PlanningBoard {
     });
 
     this.providedCanvas.addEventListener("mousedown", (ev: MouseEvent) => {
-      this.gridCamera.startDragging(ev.offsetX, ev.offsetY);
-      this.isDraggingCamera = true;
+      if (ev.button == 2) {
+        this.providedCanvas.style.cursor = "grab";
+        this.gridCamera.startDragging(ev.offsetX, ev.offsetY);
+        this.isDraggingCamera = true;
+        ev.preventDefault();
+      }
     });
 
     this.providedCanvas.addEventListener("mousemove", (ev: MouseEvent) => {
@@ -32,8 +39,12 @@ export class PlanningBoard {
       }
     });
 
-    this.providedCanvas.addEventListener("mouseup", () => {
-      this.isDraggingCamera = false;
+    this.providedCanvas.addEventListener("mouseup", (ev: MouseEvent) => {
+      if (ev.button == 2) {
+        this.providedCanvas.style.cursor = "auto";
+        this.isDraggingCamera = false;
+        ev.preventDefault();
+      }
     });
 
     this.providedCanvas.addEventListener("wheel", (ev: WheelEvent) => {

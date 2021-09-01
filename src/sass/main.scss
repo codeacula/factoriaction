@@ -2,8 +2,16 @@
 @import "layout";
 @import "reset";
 
+@font-face {
+  font-family: "Satisfontory";
+  src: url("/fonts/Satisfontory_v1.5.otf");
+}
+
 html,
 body {
+  font-family: "Roboto Mono", sans-serif;
+  font-size: 16px;
+  font-weight: normal;
   height: 100%;
   overflow: hidden;
   width: 100%;
@@ -20,6 +28,14 @@ a {
   &:hover {
     color: $purple;
   }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  color: $orange;
 }
 
 #app {
