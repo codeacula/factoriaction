@@ -3,6 +3,7 @@
   nav.navigation
     router-link(:to="{ name: 'Home' }") Home
     router-link(:to="{ name: 'About' }") About
+    a(href="#", @click="showBuildMenu()") Build (Q)
     a(href="#", @click="showHelpMenu()") Help
   router-view.main-content
   HelpMenu(v-show="shouldShowHelpMenu", @close="closeHelpMenu()")
@@ -24,11 +25,17 @@ export default defineComponent({
       shouldShowHelpMenu.value = false;
     };
 
+    const showBuildMenu = () => {
+      window.dispatchEvent(new KeyboardEvent("keydown", { key: "q" }));
+    };
+
     const showHelpMenu = () => {
       shouldShowHelpMenu.value = true;
     };
+
     return {
       closeHelpMenu,
+      showBuildMenu,
       showHelpMenu,
       shouldShowHelpMenu,
     };

@@ -19,10 +19,6 @@ export class PlanningBoard {
       this.gridCamera
     );
 
-    window.addEventListener("keydown", (ev: KeyboardEvent) => {
-      console.log("Key down", ev);
-    });
-
     this.providedCanvas.addEventListener("mousedown", (ev: MouseEvent) => {
       if (ev.button == 2) {
         this.providedCanvas.style.cursor = "grab";

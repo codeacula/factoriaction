@@ -13,9 +13,6 @@
         td H
         td Center planning board at home location
       tr
-        td WASD
-        td Move camera
-      tr
         td ESC
         td Cancel whatever you're doing
       tr
