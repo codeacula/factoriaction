@@ -1,6 +1,10 @@
 <template lang="pug">
 .planner-canvas-wrapper.full-size
-  BuildMenu(v-show="shouldShowBuildMenu")
+  BuildMenu(
+    v-show="shouldShowBuildMenu",
+    @close="closeBuildMenu()",
+    @buildable-selected="selectBuildable"
+  )
   canvas.planner-canvas.full-size(ref="planner")
 </template>
 
@@ -9,6 +13,7 @@ import { defineComponent, onMounted, onUnmounted, ref } from "vue";
 
 import BuildMenu from "@/components/BuildMenu.vue";
 import { PlanningBoard } from "@/logic/PlanningBoard";
+import { Buildable } from "@/logic";
 
 export default defineComponent({
   name: "PlannerCanvas",
@@ -16,6 +21,22 @@ export default defineComponent({
   setup() {
     const planner = ref<HTMLCanvasElement | null>(null);
     const planningBoard = ref<PlanningBoard | null>(null);
+    const shouldShowBuildMenu = ref(false);
+
+    const closeBuildMenu = () => {
+      shouldShowBuildMenu.value = false;
+    };
+
+    const selectBuildable = (buildable: Buildable) => {
+      console.log(buildable);
+      shouldShowBuildMenu.value = false;
+    };
+
+    const showBuildMenu = (ev: KeyboardEvent) => {
+      if (ev.key == "q") {
+        shouldShowBuildMenu.value = true;
+      }
+    };
 
     onMounted(() => {
       window.addEventListener("keydown", showBuildMenu);
@@ -26,19 +47,13 @@ export default defineComponent({
       }
     });
 
-    const shouldShowBuildMenu = ref(false);
-    const showBuildMenu = (ev: KeyboardEvent) => {
-      if (ev.key == "q") {
-        console.log("Show build menu");
-        shouldShowBuildMenu.value = true;
-      }
-    };
-
     onUnmounted(() => {
       window.removeEventListener("keydown", showBuildMenu);
     });
 
     return {
+      closeBuildMenu,
+      selectBuildable,
       shouldShowBuildMenu,
       planner,
     };
