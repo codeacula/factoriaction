@@ -1,3 +1,4 @@
+import { Buildable } from "./Buildable";
 import { GridCamera } from "./GridCamera";
 import { GridRenderer } from "./GridRenderer";
 import { PlanningGrid } from "./PlanningGrid";
@@ -53,29 +54,41 @@ export class PlanningBoard {
       this.gridRenderer.render();
     });
 
-    if (this.canvasParent) {
-      this.canvasParent.addEventListener("resize", () => {
-        this.fitCanvasToParent();
-        this.gridRenderer.render();
-      });
-    }
+    window.addEventListener("keydown", (ev: KeyboardEvent) => {
+      if (ev.key == "Escape") {
+        this.cancelSelection();
+      }
+    });
+
+    window.addEventListener("resize", () => {
+      this.fitCanvasToParent();
+      this.gridRenderer.render();
+    });
 
     this.fitCanvasToParent();
-    this.gridRenderer.updateCenter();
     this.gridRenderer.render();
   }
 
   private canvasParent: HTMLElement | null;
+  private currentlySelected: Buildable | null = null;
   private gridCamera: GridCamera;
   private gridRenderer: GridRenderer;
   private isDraggingCamera = false;
   private planningGrid: PlanningGrid;
   private providedCanvas: HTMLCanvasElement;
 
+  public cancelSelection(): void {
+    this.currentlySelected = null;
+  }
+
   private fitCanvasToParent(): void {
     if (this.canvasParent) {
       this.providedCanvas.width = this.canvasParent.clientWidth;
       this.providedCanvas.height = this.canvasParent.clientHeight;
     }
+  }
+
+  public selectBuildable(buildable: Buildable): void {
+    this.currentlySelected = buildable;
   }
 }

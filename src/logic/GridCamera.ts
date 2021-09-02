@@ -1,3 +1,5 @@
+import { Vec3 } from "./Vec3";
+
 export class GridCamera {
   private dragCameraStartX = 0;
   private dragCameraStartY = 0;
@@ -5,80 +7,84 @@ export class GridCamera {
   private dragCursorStartY = 0;
 
   private movementIncrement = 0.5;
+  private _position = new Vec3();
   private zoomCeiling = 0.5;
   private zoomFloor = 6;
-  private _x = 0;
-  private _y = 0;
-  private _z = 1;
 
   public get x(): number {
-    return this._x;
+    return this._position.x;
   }
 
   public get y(): number {
-    return this._y;
+    return this._position.y;
   }
 
   public get z(): number {
-    return this._z;
+    return this._position.z;
+  }
+
+  public get position(): Vec3 {
+    return new Vec3(this._position.x, this._position.y, this._position.z);
   }
 
   public back(): void {
-    this._y -= this.movementIncrement;
+    this._position.y -= this.movementIncrement;
   }
 
   public forward(): void {
-    this._y += this.movementIncrement;
+    this._position.y += this.movementIncrement;
   }
 
   public down(offset?: { x: number; y: number }): void {
-    const oldZ = this._z;
-    const newZ = this._z + this.movementIncrement;
-    this._z = Math.min(newZ, this.zoomFloor);
+    const oldZ = this._position.z;
+    const newZ = this._position.z + this.movementIncrement;
+    this._position.z = Math.min(newZ, this.zoomFloor);
 
-    if (oldZ == this._z) {
+    if (oldZ == this._position.z) {
       return;
     }
 
     if (offset) {
-      this._x -= offset.x;
-      this._y -= offset.y;
+      this._position.x -= offset.x;
+      this._position.y -= offset.y;
     }
   }
 
   public left(): void {
-    this._x -= this.movementIncrement;
+    this._position.x -= this.movementIncrement;
   }
 
   public mouseDragged(dragX: number, dragY: number) {
-    this._x = this.dragCameraStartX + (this.dragCursorStartX - dragX);
-    this._y = this.dragCameraStartY + (this.dragCursorStartY - dragY);
+    this._position.x = this.dragCameraStartX + (this.dragCursorStartX - dragX);
+    this._position.y = this.dragCameraStartY + (this.dragCursorStartY - dragY);
+
+    console.log(this._position);
   }
 
   public right(): void {
-    this._x += this.movementIncrement;
+    this._position.x += this.movementIncrement;
   }
 
   public startDragging(startX: number, startY: number) {
     this.dragCursorStartX = startX;
     this.dragCursorStartY = startY;
 
-    this.dragCameraStartX = this._x;
-    this.dragCameraStartY = this._y;
+    this.dragCameraStartX = this._position.x;
+    this.dragCameraStartY = this._position.y;
   }
 
   public up(offset?: { x: number; y: number }): void {
-    const oldZ = this._z;
-    const newZ = this._z - this.movementIncrement;
-    this._z = Math.max(newZ, this.zoomCeiling);
+    const oldZ = this._position.z;
+    const newZ = this._position.z - this.movementIncrement;
+    this._position.z = Math.max(newZ, this.zoomCeiling);
 
-    if (oldZ == this._z) {
+    if (oldZ == this._position.z) {
       return;
     }
 
     if (offset) {
-      this._x += offset.x;
-      this._y += offset.y;
+      this._position.x += offset.x;
+      this._position.y += offset.y;
     }
   }
 }
