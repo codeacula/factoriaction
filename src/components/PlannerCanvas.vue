@@ -28,12 +28,13 @@ export default defineComponent({
     };
 
     const selectBuildable = (buildable: Buildable) => {
-      console.log(buildable);
       shouldShowBuildMenu.value = false;
+      planningBoard.value?.selectBuildable(buildable);
     };
 
     const showBuildMenu = (ev: KeyboardEvent) => {
       if (ev.key == "q") {
+        planningBoard.value?.cancelSelection();
         shouldShowBuildMenu.value = true;
       }
     };

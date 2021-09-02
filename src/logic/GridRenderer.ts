@@ -1,3 +1,4 @@
+import { Buildable } from ".";
 import { GridCamera } from "./GridCamera";
 import { PlanningGrid } from "./PlanningGrid";
 import { Vec3 } from "./Vec3";
@@ -192,15 +193,33 @@ export class GridRenderer {
     }
   }
 
+  private renderSelectedBuildable(
+    buildable: Buildable,
+    image: CanvasImageSource,
+    coords: Vec3
+  ) {
+    this.context.drawImage(image, coords.x, coords.y);
+  }
+
   /**
    * Renders the current scene onto the canvas
    */
-  public render(): void {
+  public render(
+    buildable?: Buildable,
+    image?: CanvasImageSource,
+    coords?: Vec3
+  ): void {
     this.clear();
     this.drawGrid(1, "#2f3b54");
     this.drawGrid(8, "#8695b7");
     this.printColumnNumbers();
     this.printRowNumbers();
+
+    console.log("rendering", { buildable, image, coords });
+
+    if (buildable && image && coords) {
+      this.renderSelectedBuildable(buildable, image, coords);
+    }
   }
 
   private writeText(text: string, position: Vec3, color = "#bae67e") {

@@ -2,6 +2,7 @@ import { Buildable } from "./Buildable";
 import { GridCamera } from "./GridCamera";
 import { GridRenderer } from "./GridRenderer";
 import { PlanningGrid } from "./PlanningGrid";
+import { Vec3 } from "./Vec3";
 
 export class PlanningBoard {
   constructor(canvas: HTMLCanvasElement) {
@@ -30,9 +31,22 @@ export class PlanningBoard {
     });
 
     this.providedCanvas.addEventListener("mousemove", (ev: MouseEvent) => {
+      this.currentMousePos = new Vec3(ev.x, ev.y);
+
       if (this.isDraggingCamera) {
         this.gridCamera.mouseDragged(ev.offsetX, ev.offsetY);
         this.gridRenderer.render();
+      }
+
+      if (
+        this.currentlySelectedBuildable &&
+        this.currentlySelectedBuildableImg
+      ) {
+        this.gridRenderer.render(
+          this.currentlySelectedBuildable,
+          this.currentlySelectedBuildableImg,
+          new Vec3(ev.offsetX, ev.offsetY)
+        );
       }
     });
 
@@ -57,6 +71,7 @@ export class PlanningBoard {
     window.addEventListener("keydown", (ev: KeyboardEvent) => {
       if (ev.key == "Escape") {
         this.cancelSelection();
+        this.gridRenderer.render();
       }
     });
 
@@ -70,15 +85,19 @@ export class PlanningBoard {
   }
 
   private canvasParent: HTMLElement | null;
-  private currentlySelected: Buildable | null = null;
+  private currentMousePos: Vec3 = new Vec3();
+  private currentlySelectedBuildable: Buildable | null = null;
+  private currentlySelectedBuildableImg: CanvasImageSource | null = null;
   private gridCamera: GridCamera;
   private gridRenderer: GridRenderer;
   private isDraggingCamera = false;
   private planningGrid: PlanningGrid;
   private providedCanvas: HTMLCanvasElement;
+  private imageCache: Map<string, CanvasImageSource> = new Map();
 
   public cancelSelection(): void {
-    this.currentlySelected = null;
+    this.currentlySelectedBuildable = null;
+    this.gridRenderer.render();
   }
 
   private fitCanvasToParent(): void {
@@ -89,6 +108,24 @@ export class PlanningBoard {
   }
 
   public selectBuildable(buildable: Buildable): void {
-    this.currentlySelected = buildable;
+    if (!this.imageCache.has(buildable.name)) {
+      const buildableImage = new Image();
+      buildableImage.src = `/icons/pngs/${buildable.imageName}`;
+
+      this.imageCache.set(buildable.name, buildableImage);
+    }
+
+    this.currentlySelectedBuildable = buildable;
+    this.currentlySelectedBuildableImg = this.imageCache.get(
+      buildable.name
+    ) as CanvasImageSource;
+
+    setTimeout(() => {
+      this.gridRenderer.render(
+        this.currentlySelectedBuildable ?? undefined,
+        this.currentlySelectedBuildableImg ?? undefined,
+        this.currentMousePos
+      );
+    }, 100);
   }
 }
