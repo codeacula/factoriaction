@@ -35,18 +35,13 @@ export class GridCamera {
     this._position.y += this.movementIncrement;
   }
 
-  public down(offset?: { x: number; y: number }): void {
+  public down(_offset?: { x: number; y: number }): void {
     const oldZ = this._position.z;
     const newZ = this._position.z + this.movementIncrement;
     this._position.z = Math.min(newZ, this.zoomFloor);
 
     if (oldZ == this._position.z) {
       return;
-    }
-
-    if (offset) {
-      this._position.x -= offset.x;
-      this._position.y -= offset.y;
     }
   }
 
@@ -57,8 +52,6 @@ export class GridCamera {
   public mouseDragged(dragX: number, dragY: number) {
     this._position.x = this.dragCameraStartX + (this.dragCursorStartX - dragX);
     this._position.y = this.dragCameraStartY + (this.dragCursorStartY - dragY);
-
-    console.log(this._position);
   }
 
   public right(): void {
@@ -73,18 +66,13 @@ export class GridCamera {
     this.dragCameraStartY = this._position.y;
   }
 
-  public up(offset?: { x: number; y: number }): void {
+  public up(_offset?: { x: number; y: number }): void {
     const oldZ = this._position.z;
     const newZ = this._position.z - this.movementIncrement;
     this._position.z = Math.max(newZ, this.zoomCeiling);
 
     if (oldZ == this._position.z) {
       return;
-    }
-
-    if (offset) {
-      this._position.x += offset.x;
-      this._position.y += offset.y;
     }
   }
 }

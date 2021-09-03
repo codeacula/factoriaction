@@ -1,4 +1,3 @@
-import { Buildable } from ".";
 import { GridCamera } from "./GridCamera";
 import { PlanningGrid } from "./PlanningGrid";
 import { Vec3 } from "./Vec3";
@@ -30,15 +29,57 @@ export class GridRenderer {
   private camera: GridCamera;
   private canvas: HTMLCanvasElement;
   private context: CanvasRenderingContext2D;
+  private deadCenter: Vec3 = new Vec3();
 
-  // We have to offset the draw by 0.5 so that we get smaller pixel sizes
+  // We have to offset the draw by 0.5 so that we get correct pixel sizes
   // See: https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Applying_styles_and_colors#a_linewidth_example
   private drawOffset = 0.5;
   private grid: PlanningGrid;
 
-  // Decides how many pixels should be between grid lines on a standard view
-  private sizeOfUnitInPixels = 10;
+  // Decides how many pixels should be between grid lines on a standard, unzoomed view
+  private sizeOfUnitInPixels = 15;
 
+  /**
+   * Determine where on the canvas (0, 0) should be if the camera was dead center
+   */
+  public calculateDeadCenter(): void {
+    const halfX = Math.floor(this.canvas.width / 2);
+    const halfY = Math.floor(this.canvas.height / 2);
+    this.deadCenter = new Vec3(halfX, halfY);
+  }
+
+  /**
+   * Given an X position on the canvas, determine what column number it would be, taking into account any movement from
+   * the camera
+   * @param xpos
+   * @returns
+   */
+  private canvasPositionToColumnNumber(xpos: number): number {
+    const gridSize = this.getPixelsBetweenLines(1);
+    let distanceFromCenter = Math.floor(xpos) - this.canvas.width / 2;
+    distanceFromCenter += this.camera.position.x;
+
+    return distanceFromCenter / gridSize;
+  }
+
+  /**
+   * Given a Y position on the canvas, determin what row number it would be, taking into account any movement from the
+   * camera
+   * @param ypos
+   * @returns
+   */
+  private canvasPositionToRowNumber(ypos: number): number {
+    const gridSize = this.getPixelsBetweenLines(1);
+    let distanceFromCenter =
+      Math.floor(ypos) - Math.floor(this.canvas.height / 2);
+    distanceFromCenter += this.camera.position.y;
+
+    return distanceFromCenter / gridSize;
+  }
+
+  /**
+   * Clear the drawing canvas
+   */
   private clear() {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
@@ -55,19 +96,19 @@ export class GridRenderer {
     this.drawYGrid(pixelsBetweenLines, color);
   }
 
-  private drawLine(
-    fromx: number,
-    fromy: number,
-    tox: number,
-    toy: number,
-    color: string,
-    width = 1
-  ) {
+  /**
+   * Draws a line between the two provided points
+   * @param from Point on the canvas the line should start
+   * @param to Point on the canvas the line should end
+   * @param color Color the line should be
+   * @param width How many pixels wide should the line be
+   */
+  private drawLine(from: Vec3, to: Vec3, color: string, width = 1) {
     this.context.beginPath();
     this.context.lineWidth = width;
     this.context.strokeStyle = color;
-    this.context.moveTo(fromx, fromy);
-    this.context.lineTo(tox, toy);
+    this.context.moveTo(from.x, from.y);
+    this.context.lineTo(to.x, to.y);
     this.context.stroke();
   }
 
@@ -83,13 +124,14 @@ export class GridRenderer {
     const columnsToDraw = Math.ceil(this.canvas.width / unitsApart);
 
     for (let i = 0; i <= columnsToDraw; ++i) {
-      let fromx = unitsApart * i + canvasGridOffset;
-      fromx += Number.isInteger(fromx) ? this.drawOffset : 0;
-      const fromy = 0;
-      const tox = fromx;
-      const toy = this.canvas.height;
+      let xcoord = unitsApart * i + canvasGridOffset;
+      xcoord += Number.isInteger(xcoord) ? this.drawOffset : 0;
 
-      this.drawLine(fromx, fromy, tox, toy, color);
+      this.drawLine(
+        new Vec3(xcoord, 0),
+        new Vec3(xcoord, this.canvas.height),
+        color
+      );
     }
   }
 
@@ -105,13 +147,14 @@ export class GridRenderer {
     const canvasGridOffset = this.getCanvasYOffset(unitsApart);
 
     for (let i = 0; i <= rowsToDraw; ++i) {
-      let fromy = unitsApart * i + canvasGridOffset;
-      fromy += Number.isInteger(fromy) ? this.drawOffset : 0;
-      const fromx = 0;
-      const toy = fromy;
-      const tox = this.canvas.width;
+      let ycoord = unitsApart * i + canvasGridOffset;
+      ycoord += Number.isInteger(ycoord) ? this.drawOffset : 0;
 
-      this.drawLine(fromx, fromy, tox, toy, color);
+      this.drawLine(
+        new Vec3(0, ycoord),
+        new Vec3(this.canvas.width, ycoord),
+        color
+      );
     }
   }
 
@@ -135,27 +178,42 @@ export class GridRenderer {
     return (halfWidthOfCanvas + cameraY * unitsApart) % unitsApart;
   }
 
-  private canvasPositionToColumnNumber(xpos: number): number {
-    const gridSize = this.getPixelsBetweenLines(1);
-    let distanceFromCenter = Math.floor(xpos) - this.canvas.width / 2;
-    distanceFromCenter += this.camera.position.x;
-
-    return distanceFromCenter / gridSize;
-  }
-
-  private canvasPositionToRowNumber(ypos: number): number {
-    const gridSize = this.getPixelsBetweenLines(1);
-    let distanceFromCenter =
-      Math.floor(ypos) - Math.floor(this.canvas.height / 2);
-    distanceFromCenter += this.camera.position.y;
-
-    return distanceFromCenter / gridSize;
-  }
-
   private getPixelsBetweenLines(unitsApart = 1): number {
     const sizeOfUnitsAdjustedForCamera =
       this.sizeOfUnitInPixels * this.camera.position.z;
     return sizeOfUnitsAdjustedForCamera * unitsApart;
+  }
+
+  /**
+   * Given a position, find where it should snap to
+   * @param xpos
+   */
+  private getSnapPosition(pos: Vec3): Vec3 {
+    const leftSide = pos.x < this.deadCenter.x;
+    const xDistFromCenter = Math.abs(pos.x - this.deadCenter.x);
+
+    const xPosIndex = leftSide
+      ? Math.ceil(xDistFromCenter / this.getPixelsBetweenLines())
+      : Math.floor(xDistFromCenter / this.getPixelsBetweenLines());
+    const xDiff =
+      xPosIndex * this.getPixelsBetweenLines() + this.getCanvasXOffset();
+    const xPos = leftSide
+      ? this.canvas.width / 2 - xDiff
+      : this.canvas.width / 2 + xDiff;
+
+    const topSide = pos.y < this.deadCenter.y;
+    const yDistFromCenter = Math.abs(pos.y - this.deadCenter.y);
+
+    const yPosIndex = topSide
+      ? Math.ceil(yDistFromCenter / this.getPixelsBetweenLines())
+      : Math.floor(yDistFromCenter / this.getPixelsBetweenLines());
+    const yDiff =
+      yPosIndex * this.getPixelsBetweenLines() + this.getCanvasYOffset();
+    const yPos = topSide
+      ? this.canvas.height / 2 - yDiff
+      : this.canvas.height / 2 + yDiff;
+
+    return new Vec3(xPos, yPos);
   }
 
   public printColumnNumbers(): void {
@@ -170,7 +228,7 @@ export class GridRenderer {
       xpos += Number.isInteger(xpos) ? this.drawOffset : 0;
       this.writeText(
         this.canvasPositionToColumnNumber(xpos).toLocaleString(),
-        new Vec3(xpos, 10, 1)
+        new Vec3(xpos + 3, 10)
       );
     }
   }
@@ -187,38 +245,35 @@ export class GridRenderer {
       ypos += Number.isInteger(ypos) ? this.drawOffset : 0;
       this.writeText(
         this.canvasPositionToRowNumber(ypos).toLocaleString(),
-        new Vec3(0, ypos, 1),
+        new Vec3(2, ypos - 2),
         "#c3a6ff"
       );
     }
   }
 
-  private renderSelectedBuildable(
-    buildable: Buildable,
-    image: CanvasImageSource,
-    coords: Vec3
-  ) {
-    this.context.drawImage(image, coords.x, coords.y);
+  private renderSelectedBuildable(image: CanvasImageSource, coords: Vec3) {
+    const snapPos = this.getSnapPosition(coords);
+    this.context.drawImage(
+      image,
+      snapPos.x,
+      snapPos.y,
+      (image.width as number) * this.camera.z,
+      (image.height as number) * this.camera.z
+    );
   }
 
   /**
    * Renders the current scene onto the canvas
    */
-  public render(
-    buildable?: Buildable,
-    image?: CanvasImageSource,
-    coords?: Vec3
-  ): void {
+  public render(image?: CanvasImageSource, coords?: Vec3): void {
     this.clear();
     this.drawGrid(1, "#2f3b54");
     this.drawGrid(8, "#8695b7");
     this.printColumnNumbers();
     this.printRowNumbers();
 
-    console.log("rendering", { buildable, image, coords });
-
-    if (buildable && image && coords) {
-      this.renderSelectedBuildable(buildable, image, coords);
+    if (image && coords) {
+      this.renderSelectedBuildable(image, coords);
     }
   }
 

@@ -31,8 +31,6 @@ export class PlanningBoard {
     });
 
     this.providedCanvas.addEventListener("mousemove", (ev: MouseEvent) => {
-      this.currentMousePos = new Vec3(ev.x, ev.y);
-
       if (this.isDraggingCamera) {
         this.gridCamera.mouseDragged(ev.offsetX, ev.offsetY);
         this.gridRenderer.render();
@@ -43,7 +41,6 @@ export class PlanningBoard {
         this.currentlySelectedBuildableImg
       ) {
         this.gridRenderer.render(
-          this.currentlySelectedBuildable,
           this.currentlySelectedBuildableImg,
           new Vec3(ev.offsetX, ev.offsetY)
         );
@@ -66,6 +63,10 @@ export class PlanningBoard {
       }
 
       this.gridRenderer.render();
+      this.gridRenderer.render(
+        this.currentlySelectedBuildableImg ?? undefined,
+        new Vec3(ev.offsetX, ev.offsetY)
+      );
     });
 
     window.addEventListener("keydown", (ev: KeyboardEvent) => {
@@ -76,16 +77,13 @@ export class PlanningBoard {
     });
 
     window.addEventListener("resize", () => {
-      this.fitCanvasToParent();
-      this.gridRenderer.render();
+      this.recalculateCanvasAndRender();
     });
 
-    this.fitCanvasToParent();
-    this.gridRenderer.render();
+    this.recalculateCanvasAndRender();
   }
 
   private canvasParent: HTMLElement | null;
-  private currentMousePos: Vec3 = new Vec3();
   private currentlySelectedBuildable: Buildable | null = null;
   private currentlySelectedBuildableImg: CanvasImageSource | null = null;
   private gridCamera: GridCamera;
@@ -100,11 +98,14 @@ export class PlanningBoard {
     this.gridRenderer.render();
   }
 
-  private fitCanvasToParent(): void {
+  private recalculateCanvasAndRender(): void {
     if (this.canvasParent) {
       this.providedCanvas.width = this.canvasParent.clientWidth;
       this.providedCanvas.height = this.canvasParent.clientHeight;
     }
+
+    this.gridRenderer.calculateDeadCenter();
+    this.gridRenderer.render();
   }
 
   public selectBuildable(buildable: Buildable): void {
@@ -119,13 +120,5 @@ export class PlanningBoard {
     this.currentlySelectedBuildableImg = this.imageCache.get(
       buildable.name
     ) as CanvasImageSource;
-
-    setTimeout(() => {
-      this.gridRenderer.render(
-        this.currentlySelectedBuildable ?? undefined,
-        this.currentlySelectedBuildableImg ?? undefined,
-        this.currentMousePos
-      );
-    }, 100);
   }
 }
