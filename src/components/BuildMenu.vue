@@ -47,7 +47,7 @@ export default defineComponent({
   name: "BuildMenu",
   emits: {
     "buildable-selected": (buildable: Buildable) => buildable,
-    close,
+    close: () => true,
   },
   setup() {
     const currentTab = ref(Tabs.special);
