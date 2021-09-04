@@ -253,8 +253,45 @@ export class GridRenderer {
    * Given a position, find where it should snap to
    * @param xpos
    */
-  private getSnapPosition(pos: Vec3): Vec3 {
-    return new Vec3(0, 0);
+  private getSnapPosition(pos: Vec3): Vec3 | null {
+    let lastColumn: GridCell[] | null = null;
+
+    for (const column of this.scene) {
+      if (column.length == 0) {
+        continue;
+      }
+
+      if (lastColumn == null) {
+        lastColumn = column;
+        continue;
+      }
+
+      const firstRow = column[0];
+
+      if (firstRow.canvasLocation.x < pos.x) {
+        lastColumn = column;
+      }
+    }
+
+    if (lastColumn == null) {
+      return null;
+    }
+
+    let foundCell: GridCell | null = null;
+    for (const cell of lastColumn) {
+      if (foundCell == null) {
+        foundCell = cell;
+        continue;
+      }
+
+      if (cell.canvasLocation.y >= pos.y) {
+        break;
+      }
+
+      foundCell = cell;
+    }
+
+    return foundCell?.canvasLocation ?? null;
   }
 
   public printColumnNumbers(): void {
@@ -286,6 +323,10 @@ export class GridRenderer {
 
   private renderSelectedBuildable(image: CanvasImageSource, coords: Vec3) {
     const snapPos = this.getSnapPosition(coords);
+
+    if (snapPos == null) {
+      return;
+    }
 
     this.context.drawImage(
       image,
