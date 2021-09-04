@@ -7,6 +7,10 @@ export class GridCamera {
   private dragCursorStartY = 0;
 
   private movementIncrement = 0.5;
+
+  /**
+   * This position relates to the virtual canvas, not the actual HTML canvas
+   */
   private _position = new Vec3();
   private zoomCeiling = 0.5;
   private zoomFloor = 6;
@@ -52,8 +56,6 @@ export class GridCamera {
   public mouseDragged(dragX: number, dragY: number): void {
     this._position.x = this.dragCameraStartX + (this.dragCursorStartX - dragX);
     this._position.y = this.dragCameraStartY + (this.dragCursorStartY - dragY);
-
-    console.log("Position", this._position);
   }
 
   public right(): void {

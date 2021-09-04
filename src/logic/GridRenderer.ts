@@ -39,6 +39,32 @@ export class GridRenderer {
   // Decides how many pixels should be between grid lines on a standard, unzoomed view
   private sizeOfUnitInPixels = 15;
 
+  private buildScene(): void {
+    const localGridOffsetFromCenter = this.centerOfCanvas.mod(
+      this.getPixelsBetweenLines()
+    );
+    const localGridOrigin = Vec3.sub(
+      this.centerOfCanvas,
+      localGridOffsetFromCenter
+    );
+
+    const cameraPlanningGridCenter = this.camera.position
+      .div(this.getPixelsBetweenLines())
+      .floor();
+    const gridCenterPixelAmount = cameraPlanningGridCenter.mul(
+      this.getPixelsBetweenLines()
+    );
+
+    const offsetFromCamera = Vec3.sub(
+      this.camera.position,
+      gridCenterPixelAmount
+    );
+    const localGridCanvasCenter = Vec3.sub(
+      this.centerOfCanvas,
+      offsetFromCamera
+    );
+  }
+
   /**
    * Determine where on the canvas (0, 0) should be if the camera was dead center
    */
@@ -168,16 +194,27 @@ export class GridRenderer {
     return (halfWidthOfCanvas + cameraX * unitsApart) % unitsApart;
   }
 
+  /**
+   *
+   * @param unitsApart
+   * @returns
+   */
   private getCanvasYOffset(unitsApart = 1): number {
+    /**
+     * cameraY = -225
+     */
+
     const cameraY = this.camera.position.y;
 
-    // We need half of the width because the center of the camera is in the middle of the canvas
-    const halfWidthOfCanvas = this.canvas.height / 2 - cameraY;
-
     // This offset allows us to draw the grid like the user would expect, otherwise it would always be aligned to the left
-    return (halfWidthOfCanvas + cameraY * unitsApart) % unitsApart;
+    return (cameraY * unitsApart) % unitsApart;
   }
 
+  /**
+   * Determines how many pixels should be between each unit/m based on camera zoom
+   * @param unitsApart
+   * @returns
+   */
   private getPixelsBetweenLines(unitsApart = 1): number {
     const sizeOfUnitsAdjustedForCamera =
       this.sizeOfUnitInPixels * this.camera.position.z;
@@ -268,6 +305,7 @@ export class GridRenderer {
    */
   public render(image?: CanvasImageSource, coords?: Vec3): void {
     this.clear();
+    this.buildScene();
     this.drawGrid(1, "#2f3b54");
     this.drawGrid(8, "#8695b7");
     this.printColumnNumbers();
