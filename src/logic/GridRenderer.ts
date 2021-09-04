@@ -40,29 +40,7 @@ export class GridRenderer {
   private sizeOfUnitInPixels = 15;
 
   private buildScene(): void {
-    const localGridOffsetFromCenter = this.centerOfCanvas.mod(
-      this.getPixelsBetweenLines()
-    );
-    const localGridOrigin = Vec3.sub(
-      this.centerOfCanvas,
-      localGridOffsetFromCenter
-    );
-
-    const cameraPlanningGridCenter = this.camera.position
-      .div(this.getPixelsBetweenLines())
-      .floor();
-    const gridCenterPixelAmount = cameraPlanningGridCenter.mul(
-      this.getPixelsBetweenLines()
-    );
-
-    const offsetFromCamera = Vec3.sub(
-      this.camera.position,
-      gridCenterPixelAmount
-    );
-    const localGridCanvasCenter = Vec3.sub(
-      this.centerOfCanvas,
-      offsetFromCamera
-    );
+    const canvasStartingPoint = this.getPlanningGridCenterOnCanvas();
   }
 
   /**
@@ -208,6 +186,37 @@ export class GridRenderer {
 
     // This offset allows us to draw the grid like the user would expect, otherwise it would always be aligned to the left
     return (cameraY * unitsApart) % unitsApart;
+  }
+
+  private getPlanningGridCenterOnCanvas(): Vec3 {
+    // Assuming following values:
+    // Camera Position - {x: -620, y: -838, z: 1}
+    // Center of canvas {x: 639, y: 652, z: 1}
+
+    // Figure out where the camera's snapping point is in relation to the planning grid
+    const cameraPlanningGridCenter = this.camera.position
+      .div(this.getPixelsBetweenLines()) // Assume getPixelsBetweenLines = 15
+      .floor(); // [ -41, -55 ]
+
+    // Figure out how many pixels the grid translates to for when we need to find the drawing
+    // start point
+    const gridCenterPixelAmount = cameraPlanningGridCenter.mul(
+      this.getPixelsBetweenLines()
+    ); // -> [-615, -825]
+
+    // How many pixels is the current snapping point off from the camera position
+    const offsetFromCamera = Vec3.sub(
+      this.camera.position,
+      gridCenterPixelAmount
+    );
+
+    // Get the canvas location of where the grid starting point should be
+    const localGridCanvasCenter = Vec3.sub(
+      this.centerOfCanvas,
+      offsetFromCamera
+    );
+
+    return localGridCanvasCenter;
   }
 
   /**
