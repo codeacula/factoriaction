@@ -1,4 +1,5 @@
 import { GridCamera } from "./GridCamera";
+import { GridCell } from "./GridCell";
 import { PlanningGrid } from "./PlanningGrid";
 import { Vec3 } from "./Vec3";
 
@@ -35,12 +36,60 @@ export class GridRenderer {
   // See: https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Applying_styles_and_colors#a_linewidth_example
   private drawOffset = 0.5;
   private grid: PlanningGrid;
+  private scene = new Array<Array<GridCell>>();
 
   // Decides how many pixels should be between grid lines on a standard, unzoomed view
   private sizeOfUnitInPixels = 15;
 
   private buildScene(): void {
+    this.scene = new Array<Array<GridCell>>();
     const canvasStartingPoint = this.getPlanningGridCenterOnCanvas();
+    const planningGridOrigin = this.getPlanningGridCameraLocation();
+    const pixelsBetweenLines = this.getPixelsBetweenLines();
+
+    // Figure out where on the canvas the grid will start
+    const topLeft = canvasStartingPoint.mod(pixelsBetweenLines);
+    const totalUnits = new Vec3(
+      Math.floor(this.canvas.width / pixelsBetweenLines),
+      Math.floor(this.canvas.height / pixelsBetweenLines)
+    );
+
+    // Where is the top left point at on the planning grid?
+    const diffBetweenTopLeftAndCenter = Vec3.sub(canvasStartingPoint, topLeft);
+    const topLeftPlanningGrid = Vec3.sub(
+      planningGridOrigin,
+      diffBetweenTopLeftAndCenter.div(pixelsBetweenLines)
+    );
+    const topLeftOriginGrid = Vec3.sub(
+      new Vec3(0, 0),
+      diffBetweenTopLeftAndCenter.div(pixelsBetweenLines)
+    );
+
+    for (let x = 0; x < totalUnits.x; x++) {
+      const currentArr = new Array<GridCell>();
+      this.scene.push(currentArr);
+      for (let y = 0; y < totalUnits.y; y++) {
+        const xCanvasOffset = x * pixelsBetweenLines;
+        const yCanvasOffset = y * pixelsBetweenLines;
+
+        currentArr.push({
+          canvasLocation: new Vec3(
+            topLeft.x + xCanvasOffset,
+            topLeft.y + yCanvasOffset
+          ),
+          localGridLocation: new Vec3(
+            topLeftOriginGrid.x + x,
+            topLeftOriginGrid.y + y
+          ),
+          planningGridLocation: new Vec3(
+            topLeftPlanningGrid.x + x,
+            topLeftPlanningGrid.y + y
+          ),
+        });
+      }
+    }
+
+    console.log(this.scene);
   }
 
   /**
@@ -188,15 +237,17 @@ export class GridRenderer {
     return (cameraY * unitsApart) % unitsApart;
   }
 
-  private getPlanningGridCenterOnCanvas(): Vec3 {
-    // Assuming following values:
-    // Camera Position - {x: -620, y: -838, z: 1}
-    // Center of canvas {x: 639, y: 652, z: 1}
+  private getPlanningGridCameraLocation(): Vec3 {
+    return this.camera.position.div(this.getPixelsBetweenLines()).floor();
+  }
 
+  /**
+   * Finds where the current planning grid center is in relation to the canvas element
+   * @returns
+   */
+  private getPlanningGridCenterOnCanvas(): Vec3 {
     // Figure out where the camera's snapping point is in relation to the planning grid
-    const cameraPlanningGridCenter = this.camera.position
-      .div(this.getPixelsBetweenLines()) // Assume getPixelsBetweenLines = 15
-      .floor(); // [ -41, -55 ]
+    const cameraPlanningGridCenter = this.getPlanningGridCameraLocation();
 
     // Figure out how many pixels the grid translates to for when we need to find the drawing
     // start point
