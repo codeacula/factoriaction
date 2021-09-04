@@ -56,6 +56,8 @@ export class GridCamera {
   public mouseDragged(dragX: number, dragY: number): void {
     this._position.x = this.dragCameraStartX + (this.dragCursorStartX - dragX);
     this._position.y = this.dragCameraStartY + (this.dragCursorStartY - dragY);
+
+    console.log("Position", this._position);
   }
 
   public right(): void {
