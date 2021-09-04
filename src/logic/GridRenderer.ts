@@ -100,35 +100,6 @@ export class GridRenderer {
   }
 
   /**
-   * Given an X position on the canvas, determine what column number it would be, taking into account any movement from
-   * the camera
-   * @param xpos
-   * @returns
-   */
-  private canvasPositionToColumnNumber(xpos: number): number {
-    const gridSize = this.getPixelsBetweenLines(1);
-    let distanceFromCenter = Math.floor(xpos) - this.canvas.width / 2;
-    distanceFromCenter += this.camera.position.x;
-
-    return distanceFromCenter / gridSize;
-  }
-
-  /**
-   * Given a Y position on the canvas, determin what row number it would be, taking into account any movement from the
-   * camera
-   * @param ypos
-   * @returns
-   */
-  private canvasPositionToRowNumber(ypos: number): number {
-    const gridSize = this.getPixelsBetweenLines(1);
-    let distanceFromCenter =
-      Math.floor(ypos) - Math.floor(this.canvas.height / 2);
-    distanceFromCenter += this.camera.position.y;
-
-    return distanceFromCenter / gridSize;
-  }
-
-  /**
    * Clear the drawing canvas
    */
   private clear() {
