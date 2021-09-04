@@ -171,7 +171,7 @@ export class GridRenderer {
    * @param color What color should the line be
    */
   private drawXGrid(unitsApart: number, color: string): void {
-    // This offset allows us to draw the grid like the user would expect, otherwise it would always be aligned to the left
+    /*// This offset allows us to draw the grid like the user would expect, otherwise it would always be aligned to the left
     const canvasGridOffset = this.getCanvasXOffset(unitsApart);
 
     const columnsToDraw = Math.ceil(this.canvas.width / unitsApart);
@@ -185,7 +185,7 @@ export class GridRenderer {
         new Vec3(xcoord, this.canvas.height),
         color
       );
-    }
+    }*/
   }
 
   /**
@@ -194,7 +194,7 @@ export class GridRenderer {
    * @param color What color should the line be
    */
   private drawYGrid(unitsApart: number, color: string) {
-    const rowsToDraw = Math.ceil(this.canvas.height / unitsApart);
+    /*const rowsToDraw = Math.ceil(this.canvas.height / unitsApart);
 
     // This offset allows us to draw the grid like the user would expect, otherwise it would always be aligned to the left
     const canvasGridOffset = this.getCanvasYOffset(unitsApart);
@@ -208,33 +208,7 @@ export class GridRenderer {
         new Vec3(this.canvas.width, ycoord),
         color
       );
-    }
-  }
-
-  private getCanvasXOffset(unitsApart = 1): number {
-    const cameraX = this.camera.position.x;
-
-    // We need half of the width because the center of the camera is in the middle of the canvas
-    const halfWidthOfCanvas = this.canvas.width / 2 - cameraX;
-
-    // This offset allows us to draw the grid like the user would expect, otherwise it would always be aligned to the left
-    return (halfWidthOfCanvas + cameraX * unitsApart) % unitsApart;
-  }
-
-  /**
-   *
-   * @param unitsApart
-   * @returns
-   */
-  private getCanvasYOffset(unitsApart = 1): number {
-    /**
-     * cameraY = -225
-     */
-
-    const cameraY = this.camera.position.y;
-
-    // This offset allows us to draw the grid like the user would expect, otherwise it would always be aligned to the left
-    return (cameraY * unitsApart) % unitsApart;
+    }*/
   }
 
   private getPlanningGridCameraLocation(): Vec3 {
@@ -286,66 +260,35 @@ export class GridRenderer {
    * @param xpos
    */
   private getSnapPosition(pos: Vec3): Vec3 {
-    const leftSide = pos.x < this.centerOfCanvas.x;
-    const xDistFromCenter = Math.abs(pos.x - this.centerOfCanvas.x);
-
-    const xPosIndex = leftSide
-      ? Math.ceil(xDistFromCenter / this.getPixelsBetweenLines())
-      : Math.floor(xDistFromCenter / this.getPixelsBetweenLines());
-    const xDiff =
-      xPosIndex * this.getPixelsBetweenLines() + this.getCanvasXOffset();
-    const xPos = leftSide
-      ? this.canvas.width / 2 - xDiff
-      : this.canvas.width / 2 + xDiff;
-
-    const topSide = pos.y < this.centerOfCanvas.y;
-    const yDistFromCenter = Math.abs(pos.y - this.centerOfCanvas.y);
-
-    const yPosIndex = topSide
-      ? Math.ceil(yDistFromCenter / this.getPixelsBetweenLines())
-      : Math.floor(yDistFromCenter / this.getPixelsBetweenLines());
-    const yDiff =
-      yPosIndex * this.getPixelsBetweenLines() + this.getCanvasYOffset();
-    const yPos = topSide
-      ? this.canvas.height / 2 - yDiff
-      : this.canvas.height / 2 + yDiff;
-
-    return new Vec3(xPos, yPos);
+    return new Vec3(0, 0);
   }
 
   public printColumnNumbers(): void {
-    const unitsApart = this.getPixelsBetweenLines(8);
+    const xVals = this.scene.map((x) => x[0]);
+    const yVals = this.scene[0];
 
-    // This offset allows us to draw the grid like the user would expect, otherwise it would always be aligned to the left
-    const canvasGridOffset = this.getCanvasXOffset(unitsApart);
-    const columnsToDraw = Math.ceil(this.canvas.width / unitsApart);
-
-    for (let i = 0; i <= columnsToDraw; ++i) {
-      let xpos = unitsApart * i + canvasGridOffset;
-      xpos += Number.isInteger(xpos) ? this.drawOffset : 0;
-      this.writeText(
-        this.canvasPositionToColumnNumber(xpos).toLocaleString(),
-        new Vec3(xpos + 3, 10)
-      );
-    }
+    xVals.forEach((cell) => {
+      if (cell.planningGridLocation.x % 8 == 0) {
+        this.writeText(
+          cell.planningGridLocation.x.toLocaleString(),
+          new Vec3(cell.canvasLocation.x + 3, 10)
+        );
+      }
+    });
   }
 
   public printRowNumbers(): void {
-    const unitsApart = this.getPixelsBetweenLines(8);
+    const yVals = this.scene[0];
 
-    // This offset allows us to draw the grid like the user would expect, otherwise it would always be aligned to the left
-    const canvasGridOffset = this.getCanvasYOffset(unitsApart);
-    const rowsToDraw = Math.ceil(this.canvas.height / unitsApart);
-
-    for (let i = 0; i <= rowsToDraw; ++i) {
-      let ypos = unitsApart * i + canvasGridOffset;
-      ypos += Number.isInteger(ypos) ? this.drawOffset : 0;
-      this.writeText(
-        this.canvasPositionToRowNumber(ypos).toLocaleString(),
-        new Vec3(2, ypos - 2),
-        "#c3a6ff"
-      );
-    }
+    yVals.forEach((cell) => {
+      if (cell.planningGridLocation.y % 8 == 0) {
+        this.writeText(
+          cell.planningGridLocation.y.toLocaleString(),
+          new Vec3(2, cell.canvasLocation.y - 2),
+          "#c3a6ff"
+        );
+      }
+    });
   }
 
   private renderSelectedBuildable(image: CanvasImageSource, coords: Vec3) {
