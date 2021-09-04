@@ -28,8 +28,8 @@ export class GridRenderer {
 
   private camera: GridCamera;
   private canvas: HTMLCanvasElement;
+  private centerOfCanvas: Vec3 = new Vec3();
   private context: CanvasRenderingContext2D;
-  private deadCenter: Vec3 = new Vec3();
 
   // We have to offset the draw by 0.5 so that we get correct pixel sizes
   // See: https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Applying_styles_and_colors#a_linewidth_example
@@ -45,7 +45,7 @@ export class GridRenderer {
   public calculateDeadCenter(): void {
     const halfX = Math.floor(this.canvas.width / 2);
     const halfY = Math.floor(this.canvas.height / 2);
-    this.deadCenter = new Vec3(halfX, halfY);
+    this.centerOfCanvas = new Vec3(halfX, halfY);
   }
 
   /**
@@ -189,8 +189,8 @@ export class GridRenderer {
    * @param xpos
    */
   private getSnapPosition(pos: Vec3): Vec3 {
-    const leftSide = pos.x < this.deadCenter.x;
-    const xDistFromCenter = Math.abs(pos.x - this.deadCenter.x);
+    const leftSide = pos.x < this.centerOfCanvas.x;
+    const xDistFromCenter = Math.abs(pos.x - this.centerOfCanvas.x);
 
     const xPosIndex = leftSide
       ? Math.ceil(xDistFromCenter / this.getPixelsBetweenLines())
@@ -201,8 +201,8 @@ export class GridRenderer {
       ? this.canvas.width / 2 - xDiff
       : this.canvas.width / 2 + xDiff;
 
-    const topSide = pos.y < this.deadCenter.y;
-    const yDistFromCenter = Math.abs(pos.y - this.deadCenter.y);
+    const topSide = pos.y < this.centerOfCanvas.y;
+    const yDistFromCenter = Math.abs(pos.y - this.centerOfCanvas.y);
 
     const yPosIndex = topSide
       ? Math.ceil(yDistFromCenter / this.getPixelsBetweenLines())
@@ -253,6 +253,7 @@ export class GridRenderer {
 
   private renderSelectedBuildable(image: CanvasImageSource, coords: Vec3) {
     const snapPos = this.getSnapPosition(coords);
+
     this.context.drawImage(
       image,
       snapPos.x,

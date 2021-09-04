@@ -49,16 +49,18 @@ export class GridCamera {
     this._position.x -= this.movementIncrement;
   }
 
-  public mouseDragged(dragX: number, dragY: number) {
+  public mouseDragged(dragX: number, dragY: number): void {
     this._position.x = this.dragCameraStartX + (this.dragCursorStartX - dragX);
     this._position.y = this.dragCameraStartY + (this.dragCursorStartY - dragY);
+
+    console.log("Position", this._position);
   }
 
   public right(): void {
     this._position.x += this.movementIncrement;
   }
 
-  public startDragging(startX: number, startY: number) {
+  public startDragging(startX: number, startY: number): void {
     this.dragCursorStartX = startX;
     this.dragCursorStartY = startY;
 
