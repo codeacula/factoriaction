@@ -11,4 +11,16 @@ export class PlanningGrid {
   public place(placeable: Placeable): void {
     this.placedItems.push(new PlacedItem(placeable));
   }
+
+  public remove(placeable: Placeable): void {
+    const foundItem = this.placedItems.find((item) => {
+      return item.equal(placeable);
+    });
+
+    if (!foundItem) {
+      return;
+    }
+
+    this.placedItems.splice(this.placedItems.indexOf(foundItem), 1);
+  }
 }

@@ -23,6 +23,23 @@ export class PlacedItem {
   }
 
   /**
+   * Are these two placed items the same?
+   * @param compareTo
+   * @returns
+   */
+  public equal(compareTo: Placeable): boolean {
+    if (!this.position.equal(compareTo.position)) {
+      return false;
+    }
+
+    if (!(this.buildable.name == compareTo.buildable.name)) {
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
    * See if the placeable has any part inside of the provided bounding bod
    * @param boundingBox
    * @returns
