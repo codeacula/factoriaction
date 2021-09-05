@@ -1,31 +1,12 @@
 import { Vec3 } from './Vec3';
 
 export class GridCamera {
-  private dragCameraStartX = 0;
-  private dragCameraStartY = 0;
-  private dragCursorStartX = 0;
-  private dragCursorStartY = 0;
-
+  private dragCameraStart = new Vec3();
+  private dragCursorStart = new Vec3();
   private movementIncrement = 0.5;
-
-  /**
-   * This position relates to the virtual canvas, not the actual HTML canvas
-   */
-  private _position = new Vec3();
-  private zoomCeiling = 0.5;
-  private zoomFloor = 6;
-
-  public get x(): number {
-    return this._position.x;
-  }
-
-  public get y(): number {
-    return this._position.y;
-  }
-
-  public get z(): number {
-    return this._position.z;
-  }
+  private _position = new Vec3(); // This position relates to the virtual canvas, not the actual HTML canvas
+  private zoomCeiling = 0.5; // We need a ceiling for zooming out because if we hit 0 app crashes
+  private zoomFloor = 6; // Don't need to zoom in forever
 
   public get position(): Vec3 {
     return new Vec3(this._position.x, this._position.y, this._position.z);
@@ -53,26 +34,21 @@ export class GridCamera {
     this._position.x -= this.movementIncrement;
   }
 
-  public mouseDragged(dragX: number, dragY: number): void {
-    this._position.x = this.dragCameraStartX + (this.dragCursorStartX - dragX);
-    this._position.y = this.dragCameraStartY + (this.dragCursorStartY - dragY);
-
-    console.log('Position', this._position);
+  public mouseDragged(position: Vec3): void {
+    this._position.x = this.dragCameraStart.x + (this.dragCursorStart.x - position.x);
+    this._position.y = this.dragCameraStart.y + (this.dragCursorStart.y - position.y);
   }
 
   public right(): void {
     this._position.x += this.movementIncrement;
   }
 
-  public startDragging(startX: number, startY: number): void {
-    this.dragCursorStartX = startX;
-    this.dragCursorStartY = startY;
-
-    this.dragCameraStartX = this._position.x;
-    this.dragCameraStartY = this._position.y;
+  public startDragging(pos: Vec3): void {
+    this.dragCursorStart = pos;
+    this.dragCameraStart = this._position.copy();
   }
 
-  public up(_offset?: { x: number; y: number }): void {
+  public up(_offset?: Vec3): void {
     const oldZ = this._position.z;
     const newZ = this._position.z - this.movementIncrement;
     this._position.z = Math.max(newZ, this.zoomCeiling);
