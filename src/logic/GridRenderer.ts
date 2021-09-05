@@ -30,6 +30,9 @@ export class GridRenderer {
   // See: https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Applying_styles_and_colors#a_linewidth_example
   private drawOffset = 0.5;
   private grid: PlanningGrid;
+
+  // How many pixels in an image represent 1m on the grid
+  private pixelsPerGrid = 10;
   private scene = new Array<Array<GridCell>>();
 
   // Decides how many pixels should be between grid lines on a standard, unzoomed view
@@ -254,14 +257,11 @@ export class GridRenderer {
       return;
     }
 
+    const displayWidth = ((image.width as number) / this.pixelsPerGrid) * this.getPixelsBetweenLines();
+    const displayHeight = ((image.height as number) / this.pixelsPerGrid) * this.getPixelsBetweenLines();
+
     this.context.globalAlpha = 0.5;
-    this.context.drawImage(
-      image,
-      snapPos.x,
-      snapPos.y,
-      (image.width as number) * this.camera.z,
-      (image.height as number) * this.camera.z
-    );
+    this.context.drawImage(image, snapPos.x, snapPos.y, displayWidth, displayHeight);
     this.context.globalAlpha = 1;
   }
 
