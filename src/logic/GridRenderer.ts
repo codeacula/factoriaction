@@ -1,13 +1,11 @@
 import { GridCamera } from './GridCamera';
 import { GridCell } from './GridCell';
-import { PlanningGrid } from './PlanningGrid';
 import { Vec3 } from './Vec3';
 
 export class GridRenderer {
-  constructor(canvas: HTMLCanvasElement, grid: PlanningGrid, camera: GridCamera) {
+  constructor(canvas: HTMLCanvasElement, camera: GridCamera) {
     this.camera = camera;
     this.canvas = canvas;
-    this.grid = grid;
 
     const drawingContext = this.canvas.getContext('2d', {
       alpha: true,
@@ -29,15 +27,18 @@ export class GridRenderer {
   // We have to offset the draw by 0.5 so that we get correct pixel sizes
   // See: https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Applying_styles_and_colors#a_linewidth_example
   private drawOffset = 0.5;
-  private grid: PlanningGrid;
 
   // How many pixels in an image represent 1m on the grid
   private pixelsPerGrid = 10;
   private scene = new Array<Array<GridCell>>();
+  private sceneByX: { [key: number]: GridCell[] } = {};
 
   // Decides how many pixels should be between grid lines on a standard, unzoomed view
   private sizeOfUnitInPixels = 15;
 
+  /**
+   * Given the camera position, builds the graph of what coords the user should see and where
+   */
   private buildScene(): void {
     this.scene = new Array<Array<GridCell>>();
     const canvasStartingPoint = this.getPlanningGridCenterOnCanvas();
@@ -59,15 +60,20 @@ export class GridRenderer {
     for (let x = 0; x < totalUnits.x; x++) {
       const currentArr = new Array<GridCell>();
       this.scene.push(currentArr);
-      for (let y = 0; y < totalUnits.y; y++) {
-        const xCanvasOffset = x * pixelsBetweenLines;
-        const yCanvasOffset = y * pixelsBetweenLines;
+      const xCanvasOffset = x * pixelsBetweenLines;
 
-        currentArr.push({
+      this.sceneByX[xCanvasOffset] = [];
+
+      for (let y = 0; y < totalUnits.y; y++) {
+        const yCanvasOffset = y * pixelsBetweenLines;
+        const gridCell: GridCell = {
           canvasLocation: new Vec3(topLeft.x + xCanvasOffset, topLeft.y + yCanvasOffset),
           localGridLocation: new Vec3(topLeftOriginGrid.x + x, topLeftOriginGrid.y + y),
           planningGridLocation: new Vec3(topLeftPlanningGrid.x + x, topLeftPlanningGrid.y + y),
-        });
+        };
+
+        currentArr.push(gridCell);
+        this.sceneByX[xCanvasOffset].push(gridCell);
       }
     }
   }
@@ -75,7 +81,7 @@ export class GridRenderer {
   /**
    * Determine where on the canvas (0, 0) should be if the camera was dead center
    */
-  public calculateDeadCenter(): void {
+  public calculateCenterOfCanvas(): void {
     const halfX = Math.floor(this.canvas.width / 2);
     const halfY = Math.floor(this.canvas.height / 2);
     this.centerOfCanvas = new Vec3(halfX, halfY);
@@ -176,6 +182,16 @@ export class GridRenderer {
   }
 
   /**
+   * Given a position on the canvas, get the planning grid cell it would snap to
+   * @param pos Position to test from
+   * @returns
+   */
+  public getPlanningGridLocation(pos: Vec3): Vec3 | null {
+    const gridCell = this.getSnapGridCell(pos);
+    return gridCell?.planningGridLocation ?? null;
+  }
+
+  /**
    * Determines how many pixels should be between each unit/m based on camera zoom
    * @param unitsApart
    * @returns
@@ -186,10 +202,11 @@ export class GridRenderer {
   }
 
   /**
-   * Given a position, find where it should snap to
-   * @param xpos
+   * Give a position, get the grid cell that would apply
+   * @param pos
+   * @returns
    */
-  private getSnapPosition(pos: Vec3): Vec3 | null {
+  private getSnapGridCell(pos: Vec3): GridCell | null {
     let lastColumn: GridCell[] | null = null;
 
     for (const column of this.scene) {
@@ -227,7 +244,7 @@ export class GridRenderer {
       foundCell = cell;
     }
 
-    return foundCell?.canvasLocation ?? null;
+    return foundCell ?? null;
   }
 
   public printColumnNumbers(): void {
@@ -251,11 +268,13 @@ export class GridRenderer {
   }
 
   private renderSelectedBuildable(image: CanvasImageSource, coords: Vec3) {
-    const snapPos = this.getSnapPosition(coords);
+    const snapGrid = this.getSnapGridCell(coords);
 
-    if (snapPos == null) {
+    if (snapGrid == null) {
       return;
     }
+
+    const snapPos = snapGrid.canvasLocation;
 
     const displayWidth = ((image.width as number) / this.pixelsPerGrid) * this.getPixelsBetweenLines();
     const displayHeight = ((image.height as number) / this.pixelsPerGrid) * this.getPixelsBetweenLines();
