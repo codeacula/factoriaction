@@ -2,7 +2,7 @@
 .planner-canvas-wrapper.full-size
   BuildMenu(
     v-show='shouldShowBuildMenu'
-    :visibleState='shouldShowBuildMenu'
+    :class='{ "anim-fade-in": shouldShowBuildMenu }'
     @close='closeBuildMenu()'
     @buildable-selected='selectBuildable'
   )
