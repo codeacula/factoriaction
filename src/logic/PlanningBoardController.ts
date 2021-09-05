@@ -1,3 +1,4 @@
+import { PlacedItem } from '.';
 import { Buildable } from './Buildable';
 import { GridCamera } from './GridCamera';
 import { GridRenderer } from './GridRenderer';
@@ -40,13 +41,13 @@ export class PlanningBoardController {
 
   public cancelSelection(): void {
     this.currentlySelectedBuildable = null;
-    this.gridRenderer.render();
+    this.render();
   }
 
   private onKeyDown(ev: KeyboardEvent): void {
     if (ev.key == 'Escape') {
       this.cancelSelection();
-      this.gridRenderer.render();
+      this.render();
     }
   }
 
@@ -55,13 +56,6 @@ export class PlanningBoardController {
     if (ev.button == MouseButtons.Left) {
       if (this.currentlySelectedBuildable) {
         const mouseGridPos = this.gridRenderer.getPlanningGridLocation(eventLoc);
-
-        if (!mouseGridPos) {
-          throw new Error(
-            `Unable to locate a grid cell from the following canvas location - X:${eventLoc.x} Y:${eventLoc.y}`
-          );
-        }
-
         this.planningGrid.place(this.currentlySelectedBuildable, mouseGridPos);
       }
     } else if (ev.button == MouseButtons.Right) {
@@ -73,13 +67,15 @@ export class PlanningBoardController {
   }
 
   private onMouseMove(ev: MouseEvent): void {
+    const eventLoc = convertToVec3(ev);
     if (this.isDraggingCamera) {
-      this.gridCamera.mouseDragged(convertToVec3(ev));
-      this.gridRenderer.render();
+      this.gridCamera.mouseDragged(eventLoc);
+      this.render();
     }
 
     if (this.currentlySelectedBuildable && this.currentlySelectedBuildableImg) {
-      this.gridRenderer.render(this.currentlySelectedBuildableImg, convertToVec3(ev));
+      this.updateSelectedItem(eventLoc);
+      this.render();
     }
   }
 
@@ -100,7 +96,8 @@ export class PlanningBoardController {
       this.gridCamera.up(vec);
     }
 
-    this.gridRenderer.render();
+    this.updateSelectedItem(vec);
+
     this.gridRenderer.render(this.currentlySelectedBuildableImg ?? undefined, vec);
   }
 
@@ -115,6 +112,10 @@ export class PlanningBoardController {
     }
 
     this.gridRenderer.calculateCenterOfCanvas();
+    this.render();
+  }
+
+  private render(): void {
     this.gridRenderer.render();
   }
 
@@ -152,5 +153,19 @@ export class PlanningBoardController {
     this.providedCanvas.addEventListener('wheel', (ev) => {
       this.onMouseWheel(ev);
     });
+  }
+
+  /**
+   * Gets the planning grid location of the provided Vec3 and updates the grid renderer with the selected buildable,
+   * if one it selected and a grid position is returned
+   * @param pos The canvas location to find the planning grid coordinates from
+   */
+  private updateSelectedItem(pos: Vec3): void {
+    if (this.currentlySelectedBuildable == null) {
+      return;
+    }
+
+    const planningGridLoc = this.gridRenderer.getPlanningGridLocation(pos);
+    this.gridRenderer.currentlySelectedItem = new PlacedItem(this.currentlySelectedBuildable, planningGridLoc);
   }
 }
