@@ -117,7 +117,7 @@ export default defineComponent({
   overflow: hidden;
   position: absolute;
   right: 5%;
-  width: 30%;
+  width: 25%;
 }
 
 .build-menu-header {
@@ -204,9 +204,10 @@ export default defineComponent({
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  margin: 0;
+  gap: 0.5rem;
   list-style-type: none;
-  padding: 0;
+  margin: 0;
+  padding: 1rem;
 }
 .item {
   width: 25%;
