@@ -1,5 +1,5 @@
 <template lang="pug">
-.build-menu(@click.self='$emit("close")', :class='{ "anim-fade-in": visibleState }')
+.build-menu(@click.self='$emit("close")', :class='{ visible: visibleState }')
   .build-menu-wrapper
     header.build-menu-header
       .build-menu-icon
@@ -102,9 +102,8 @@ export default defineComponent({
   position: absolute;
   width: 100%;
 
-  &.anim-fade-in {
+  &.visible {
     animation: fadeIn 0.1s linear forwards;
-    opacity: 0;
   }
 }
 
