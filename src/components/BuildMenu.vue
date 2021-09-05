@@ -14,12 +14,13 @@
         .item-list-wrapper
           .item-group(v-for='group in groups')
             h3.item-group-header {{ group }}
-            BuildableItemButton(
-              v-for='item in getItemsByGroup(group)'
-              class='item'
-              :item='item'
-              @click='$emit("buildable-selected", item)'
-            )
+            ul.item-list
+              BuildableItemButton(
+                v-for='item in getItemsByGroup(group)'
+                class='item'
+                :item='item'
+                @click='$emit("buildable-selected", item)'
+              )
 </template>
 
 <script lang="ts">
