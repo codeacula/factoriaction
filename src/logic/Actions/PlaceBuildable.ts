@@ -1,11 +1,13 @@
-import { PlanningAction } from ".";
+import { PlanningAction } from '.';
+import { ActionInjectables } from '../ActionInjectables';
 
-export class PlaceBuildable implements PlanningAction {
-  commit() {
+export class PlaceBuildable extends PlanningAction {
+  commit(injectable: ActionInjectables): void {
+    console.log(injectable);
     return;
   }
 
-  revert() {
+  revert(): void {
     return;
   }
 }

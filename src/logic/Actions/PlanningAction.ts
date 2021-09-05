@@ -1,6 +1,6 @@
-import { ActionInjectables } from "../ActionInjectables";
+import { ActionInjectables } from '../ActionInjectables';
 
-export interface PlanningAction {
-  commit(injectable: ActionInjectables): void;
-  revert(injectable: ActionInjectables): void;
+export abstract class PlanningAction {
+  abstract commit(_injectable: ActionInjectables): void;
+  abstract revert(_injectable: ActionInjectables): void;
 }

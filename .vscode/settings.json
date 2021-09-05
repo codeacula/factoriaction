@@ -1,0 +1,4 @@
+{
+  "eslint.validate": ["typescript"],
+  "files.eol": "\n"
+}
