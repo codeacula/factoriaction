@@ -1,3 +1,4 @@
+import { PlacedItem } from '.';
 import { GridCamera } from './GridCamera';
 import { GridCell } from './GridCell';
 import { Vec3 } from './Vec3';
@@ -23,6 +24,8 @@ export class GridRenderer {
   private canvas: HTMLCanvasElement;
   private centerOfCanvas: Vec3 = new Vec3();
   private context: CanvasRenderingContext2D;
+  public currentlySelectedItem: PlacedItem | null = null;
+  public currentlyPlacedItems: PlacedItem[] = [];
 
   // We have to offset the draw by 0.5 so that we get correct pixel sizes
   // See: https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Applying_styles_and_colors#a_linewidth_example
@@ -186,9 +189,16 @@ export class GridRenderer {
    * @param pos Position to test from
    * @returns
    */
-  public getPlanningGridLocation(pos: Vec3): Vec3 | null {
+  public getPlanningGridLocation(pos: Vec3): Vec3 {
     const gridCell = this.getSnapGridCell(pos);
-    return gridCell?.planningGridLocation ?? null;
+
+    if (gridCell == null) {
+      throw new Error(
+        `Unable to find a planning grid location from the following canvas coordinates - X:${pos.x} Y:${pos.y}`
+      );
+    }
+
+    return gridCell.planningGridLocation;
   }
 
   /**
