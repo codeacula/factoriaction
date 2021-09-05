@@ -29,6 +29,14 @@ export class Vec3 {
   }
 
   /**
+   * Creates a new instance of this vector
+   * @returns
+   */
+  public copy(): Vec3 {
+    return new Vec3(this.x, this.y, this.z);
+  }
+
+  /**
    * Divide the properties of the vector by the provided value
    * @param num
    * @returns

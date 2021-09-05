@@ -8,7 +8,7 @@
 import { defineComponent, onMounted, onUnmounted, ref } from 'vue';
 
 import BuildMenu from '@/components/BuildMenu.vue';
-import { PlanningBoard } from '@/logic/PlanningBoard';
+import { PlanningBoardController } from '@/logic/PlanningBoardController';
 import { Buildable } from '@/logic';
 
 export default defineComponent({
@@ -16,7 +16,7 @@ export default defineComponent({
   components: { BuildMenu },
   setup() {
     const planner = ref<HTMLCanvasElement | null>(null);
-    const planningBoard = ref<PlanningBoard | null>(null);
+    const planningBoard = ref<PlanningBoardController | null>(null);
     const shouldShowBuildMenu = ref(false);
 
     const closeBuildMenu = () => {
@@ -38,7 +38,7 @@ export default defineComponent({
     onMounted(() => {
       window.addEventListener('keydown', showBuildMenu);
       if (planner.value) {
-        planningBoard.value = new PlanningBoard(planner.value as HTMLCanvasElement);
+        planningBoard.value = new PlanningBoardController(planner.value as HTMLCanvasElement);
       }
     });
 
