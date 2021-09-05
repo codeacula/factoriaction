@@ -1,5 +1,5 @@
 <template lang="pug">
-.build-menu(@click.self='$emit("close")')
+.build-menu(@click.self='$emit("close")', :class='{ "anim-fade-in": visibleState }')
   .build-menu-wrapper
     header.build-menu-header
       .build-menu-icon
@@ -31,6 +31,13 @@ export default defineComponent({
   emits: {
     'buildable-selected': (buildable: Buildable) => buildable,
     close: () => true,
+  },
+  props: {
+    // Determines visible state of component for conditional classes
+    visibleState: {
+      type: Boolean,
+      default: false,
+    },
   },
   setup() {
     const currentTab = ref(Tabs.special);
@@ -69,6 +76,16 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 @import '@/sass/variables.scss';
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 .build-menu {
   align-items: center;
   background-color: rgba(0, 0, 0, 0.7);
@@ -78,6 +95,11 @@ export default defineComponent({
   justify-content: center;
   position: absolute;
   width: 100%;
+
+  &.anim-fade-in {
+    animation: fadeIn 0.1s linear forwards;
+    opacity: 0;
+  }
 }
 
 .build-menu-wrapper {
@@ -86,6 +108,8 @@ export default defineComponent({
   flex-direction: column;
   height: 90%;
   overflow: hidden;
+  position: absolute;
+  right: 5%;
   width: 50%;
 }
 
