@@ -27,6 +27,15 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import '@/sass/variables.scss';
 
+@keyframes backgroundFadeIn {
+  from {
+    background-color: rgba($dark-4, 0);
+  }
+  to {
+    background-color: rgba($dark-4, 100);
+  }
+}
+
 .buildable-item-button {
   cursor: pointer;
   display: flex;
@@ -34,8 +43,10 @@ export default defineComponent({
   overflow-y: auto;
   min-width: 8rem;
   padding: 1rem;
+  border-radius: 5px;
+
   &:hover {
-    background-color: $dark-4;
+    animation: backgroundFadeIn 0.2s linear forwards;
   }
 }
 
