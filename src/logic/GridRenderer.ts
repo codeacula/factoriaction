@@ -1,12 +1,14 @@
-import { PlacedItem } from '.';
+import { PlacedItem, PlanningGrid } from '.';
+import { BoundingBox } from './BoundingBox';
 import { GridCamera } from './GridCamera';
 import { GridCell } from './GridCell';
 import { Vec3 } from './Vec3';
 
 export class GridRenderer {
-  constructor(canvas: HTMLCanvasElement, camera: GridCamera) {
+  constructor(canvas: HTMLCanvasElement, camera: GridCamera, planningGrid: PlanningGrid) {
     this.camera = camera;
     this.canvas = canvas;
+    this.planningGrid = planningGrid;
 
     const drawingContext = this.canvas.getContext('2d', {
       alpha: true,
@@ -25,7 +27,6 @@ export class GridRenderer {
   private centerOfCanvas: Vec3 = new Vec3();
   private context: CanvasRenderingContext2D;
   public currentlySelectedItem: PlacedItem | null = null;
-  public currentlyPlacedItems: PlacedItem[] = [];
 
   // We have to offset the draw by 0.5 so that we get correct pixel sizes
   // See: https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Applying_styles_and_colors#a_linewidth_example
@@ -33,8 +34,12 @@ export class GridRenderer {
 
   // How many pixels in an image represent 1m on the grid
   private pixelsPerGrid = 10;
+  private planningGrid: PlanningGrid;
+  private planningGridBounds = new BoundingBox(new Vec3(), new Vec3());
+
   private scene = new Array<Array<GridCell>>();
-  private sceneByX: { [key: number]: GridCell[] } = {};
+  private sceneByCanvasXY: { [x: number]: { [y: number]: GridCell } } = {};
+  private sceneByPlanningGridXY: { [x: number]: { [y: number]: GridCell } } = {};
 
   // Decides how many pixels should be between grid lines on a standard, unzoomed view
   private sizeOfUnitInPixels = 15;
@@ -60,12 +65,13 @@ export class GridRenderer {
     const topLeftPlanningGrid = Vec3.sub(planningGridOrigin, diffBetweenTopLeftAndCenter.div(pixelsBetweenLines));
     const topLeftOriginGrid = Vec3.sub(new Vec3(0, 0), diffBetweenTopLeftAndCenter.div(pixelsBetweenLines));
 
+    let lastYBuilt: GridCell | null = null;
     for (let x = 0; x < totalUnits.x; x++) {
       const currentArr = new Array<GridCell>();
       this.scene.push(currentArr);
       const xCanvasOffset = x * pixelsBetweenLines;
 
-      this.sceneByX[xCanvasOffset] = [];
+      this.sceneByCanvasXY[xCanvasOffset] = {};
 
       for (let y = 0; y < totalUnits.y; y++) {
         const yCanvasOffset = y * pixelsBetweenLines;
@@ -76,8 +82,19 @@ export class GridRenderer {
         };
 
         currentArr.push(gridCell);
-        this.sceneByX[xCanvasOffset].push(gridCell);
+        lastYBuilt = gridCell;
+
+        if (!this.sceneByPlanningGridXY[gridCell.planningGridLocation.x]) {
+          this.sceneByPlanningGridXY[gridCell.planningGridLocation.x] = {};
+        }
+
+        this.sceneByPlanningGridXY[gridCell.planningGridLocation.x][gridCell.planningGridLocation.y] = gridCell;
+        this.sceneByCanvasXY[xCanvasOffset][yCanvasOffset] = gridCell;
       }
+    }
+
+    if (lastYBuilt) {
+      this.planningGridBounds = new BoundingBox(topLeftPlanningGrid, lastYBuilt.planningGridLocation);
     }
   }
 
@@ -95,6 +112,19 @@ export class GridRenderer {
    */
   private clear() {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+  }
+
+  private drawPlacedItem(item: PlacedItem, opacity = 1) {
+    const cell = this.getCellByPlanningGrid(item.position);
+
+    const snapPos = cell.canvasLocation;
+
+    const displayWidth = ((item.image.width as number) / this.pixelsPerGrid) * this.getPixelsBetweenLines();
+    const displayHeight = ((item.image.height as number) / this.pixelsPerGrid) * this.getPixelsBetweenLines();
+
+    this.context.globalAlpha = opacity;
+    this.context.drawImage(item.image, snapPos.x, snapPos.y, displayWidth, displayHeight);
+    this.context.globalAlpha = 1;
   }
 
   /**
@@ -157,6 +187,23 @@ export class GridRenderer {
         this.drawLine(new Vec3(0, ycoord), new Vec3(this.canvas.width, ycoord), color);
       }
     });
+  }
+
+  /**
+   * Given a set of planning grid coordinates, returns matching cell or throws errors
+   * @param pos
+   * @returns
+   */
+  public getCellByPlanningGrid(pos: Vec3): GridCell {
+    if (!this.sceneByPlanningGridXY[pos.x]) {
+      throw new Error(`No cell stored at X:${pos.x} location`);
+    }
+
+    if (!this.sceneByPlanningGridXY[pos.x][pos.y]) {
+      throw new Error(`No cell stored at Y:${pos.y} location`);
+    }
+
+    return this.sceneByPlanningGridXY[pos.x][pos.y];
   }
 
   private getPlanningGridCameraLocation(): Vec3 {
@@ -277,27 +324,17 @@ export class GridRenderer {
     });
   }
 
-  private renderSelectedBuildable(image: CanvasImageSource, coords: Vec3) {
-    const snapGrid = this.getSnapGridCell(coords);
-
-    if (snapGrid == null) {
+  private renderSelectedBuildable() {
+    if (!this.currentlySelectedItem) {
       return;
     }
-
-    const snapPos = snapGrid.canvasLocation;
-
-    const displayWidth = ((image.width as number) / this.pixelsPerGrid) * this.getPixelsBetweenLines();
-    const displayHeight = ((image.height as number) / this.pixelsPerGrid) * this.getPixelsBetweenLines();
-
-    this.context.globalAlpha = 0.5;
-    this.context.drawImage(image, snapPos.x, snapPos.y, displayWidth, displayHeight);
-    this.context.globalAlpha = 1;
+    this.drawPlacedItem(this.currentlySelectedItem, 0.5);
   }
 
   /**
    * Renders the current scene onto the canvas
    */
-  public render(image?: CanvasImageSource, coords?: Vec3): void {
+  public render(): void {
     this.clear();
     this.buildScene();
     this.drawGrid(1, '#2f3b54');
@@ -305,9 +342,14 @@ export class GridRenderer {
     this.printColumnNumbers();
     this.printRowNumbers();
 
-    if (image && coords) {
-      this.renderSelectedBuildable(image, coords);
-    }
+    this.showPlacedItemsInScene();
+    this.renderSelectedBuildable();
+  }
+
+  private showPlacedItemsInScene(): void {
+    const placedBuildables = this.planningGrid.getAllInArea(this.planningGridBounds);
+
+    placedBuildables.forEach((item) => this.drawPlacedItem(item));
   }
 
   private writeText(text: string, position: Vec3, color = '#bae67e') {

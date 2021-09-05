@@ -14,7 +14,7 @@ export class PlanningBoardController {
   constructor(canvas: HTMLCanvasElement) {
     this.setupCanvas(canvas);
     this.bindActionsToWindow();
-    this.gridRenderer = new GridRenderer(this.providedCanvas, this.gridCamera);
+    this.gridRenderer = new GridRenderer(this.providedCanvas, this.gridCamera, this.planningGrid);
 
     this.recalculateCanvasAndRender();
   }
@@ -54,9 +54,10 @@ export class PlanningBoardController {
   private onMouseDown(ev: MouseEvent): void {
     const eventLoc = convertToVec3(ev);
     if (ev.button == MouseButtons.Left) {
-      if (this.currentlySelectedBuildable) {
+      if (this.currentlySelectedBuildable && this.currentlySelectedBuildableImg) {
         const mouseGridPos = this.gridRenderer.getPlanningGridLocation(eventLoc);
-        this.planningGrid.place(this.currentlySelectedBuildable, mouseGridPos);
+        this.planningGrid.place(this.currentlySelectedBuildable, mouseGridPos, this.currentlySelectedBuildableImg);
+        this.render();
       }
     } else if (ev.button == MouseButtons.Right) {
       this.providedCanvas.style.cursor = 'grab';
@@ -98,7 +99,7 @@ export class PlanningBoardController {
 
     this.updateSelectedItem(vec);
 
-    this.gridRenderer.render(this.currentlySelectedBuildableImg ?? undefined, vec);
+    this.gridRenderer.render();
   }
 
   private onResize(): void {
@@ -119,6 +120,10 @@ export class PlanningBoardController {
     this.gridRenderer.render();
   }
 
+  /**
+   * Tells the controller that a buildable has been selected from the build menu
+   * @param buildable
+   */
   public selectBuildable(buildable: Buildable): void {
     if (!this.imageCache.has(buildable.name)) {
       const buildableImage = new Image();
@@ -131,7 +136,11 @@ export class PlanningBoardController {
     this.currentlySelectedBuildableImg = this.imageCache.get(buildable.name) as CanvasImageSource;
   }
 
-  public setupCanvas(canvas: HTMLCanvasElement): void {
+  /**
+   * Given a canvas tag, extracts needed information from it and sets up event hooks
+   * @param canvas
+   */
+  private setupCanvas(canvas: HTMLCanvasElement): void {
     this.providedCanvas = canvas;
     this.providedCanvas.oncontextmenu = () => {
       return false;
@@ -161,11 +170,15 @@ export class PlanningBoardController {
    * @param pos The canvas location to find the planning grid coordinates from
    */
   private updateSelectedItem(pos: Vec3): void {
-    if (this.currentlySelectedBuildable == null) {
+    if (this.currentlySelectedBuildable == null || this.currentlySelectedBuildableImg == null) {
       return;
     }
 
     const planningGridLoc = this.gridRenderer.getPlanningGridLocation(pos);
-    this.gridRenderer.currentlySelectedItem = new PlacedItem(this.currentlySelectedBuildable, planningGridLoc);
+    this.gridRenderer.currentlySelectedItem = new PlacedItem(
+      this.currentlySelectedBuildable,
+      planningGridLoc,
+      this.currentlySelectedBuildableImg
+    );
   }
 }
