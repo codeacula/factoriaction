@@ -1,52 +1,35 @@
 <template lang="pug">
-.build-menu(@click.self="$emit('close')")
+.build-menu(@click.self='$emit("close")')
   .build-menu-wrapper
     header.build-menu-header
       .build-menu-icon
       .header-text Builder
-      .close-button(@click="$emit('close')") X
+      .close-button(@click='$emit("close")') X
     main.builder-box
       nav.builder-nav
         ul.builder-tab-list
-          li.builder-tab(
-            v-for="tab in Tabs",
-            :class="{ active: currentTab == tab }",
-            @click="makeActive(tab)"
-          ) {{ tab.toString() }}
+          li.builder-tab(v-for='tab in Tabs', :class='{ active: currentTab == tab }' @click='makeActive(tab)') {{ tab.toString() }}
       .builder-content
         .search-box
         .item-list-wrapper
-          .item-group(v-for="group in groups")
+          .item-group(v-for='group in groups')
             h3.item-group-header {{ group }}
             ul.item-list
-              li.item(
-                v-for="item in getItemsByGroup(group)",
-                @click="$emit('buildable-selected', item)"
-              ) {{ item.name }}
+              li.item(v-for='item in getItemsByGroup(group)' @click='$emit("buildable-selected", item)') {{ item.name }}
 </template>
 
 <script lang="ts">
-import { Buildable } from "@/logic";
-import { computed, defineComponent } from "@vue/runtime-core";
-import { ref } from "vue";
+import { Buildable } from '@/logic';
+import { computed, defineComponent } from '@vue/runtime-core';
+import { ref } from 'vue';
 
-import buildables from "@/data/buildables.json";
-
-enum Tabs {
-  special = "Special",
-  foundations = "Foundations",
-  logistics = "Logistics",
-  organization = "Organization",
-  power = "Power",
-  production = "Production",
-  transportation = "Transportation",
-  walls = "Walls",
-}
+import buildables from '@/data/buildables.json';
+import { Tabs } from './Tabs';
 
 export default defineComponent({
-  name: "BuildMenu",
+  name: 'BuildMenu',
   emits: {
-    "buildable-selected": (buildable: Buildable) => buildable,
+    'buildable-selected': (buildable: Buildable) => buildable,
     close: () => true,
   },
   setup() {
@@ -54,18 +37,13 @@ export default defineComponent({
 
     const getItemsByGroup = (groupName: string): Buildable[] => {
       return buildables
-        .filter(
-          (x) =>
-            x.tab == currentTab.value.toString() && x.groupName == groupName
-        )
+        .filter((x) => x.tab == currentTab.value.toString() && x.groupName == groupName)
         .sort((a, b) => {
           if (a.displayOrder == b.displayOrder) {
             return 0;
           }
 
-          return (a.displayOrder as number) < (b.displayOrder as number)
-            ? -1
-            : 1;
+          return (a.displayOrder as number) < (b.displayOrder as number) ? -1 : 1;
         });
     };
 
@@ -73,45 +51,24 @@ export default defineComponent({
       return Array.from(
         new Set(
           buildables
-            .filter(
-              (x) =>
-                x.tab == currentTab.value &&
-                x.displayOrder != null &&
-                x.groupName != null
-            )
+            .filter((x) => x.tab == currentTab.value && x.displayOrder != null && x.groupName != null)
             .map((x) => x.groupName as string)
             .sort()
         )
       );
     });
 
-    const items = computed(() => {
-      const res = buildables
-        .filter((x) => x.tab == currentTab.value.toString())
-        .sort((a, b) => {
-          if (a.displayOrder == b.displayOrder) {
-            return 0;
-          }
-
-          return (a.displayOrder as number) < (b.displayOrder as number)
-            ? -1
-            : 1;
-        });
-
-      return res;
-    });
-
     const makeActive = (category: Tabs) => {
       currentTab.value = category;
     };
 
-    return { currentTab, groups, items, getItemsByGroup, makeActive, Tabs };
+    return { currentTab, groups, getItemsByGroup, makeActive, Tabs };
   },
 });
 </script>
 
 <style lang="scss" scoped>
-@import "@/sass/variables.scss";
+@import '@/sass/variables.scss';
 .build-menu {
   align-items: center;
   background-color: rgba(0, 0, 0, 0.7);
@@ -228,7 +185,7 @@ export default defineComponent({
   text-align: center;
   width: 25%;
   &:after {
-    content: "";
+    content: '';
     display: block;
     padding-bottom: 90%;
   }

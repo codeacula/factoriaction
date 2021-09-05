@@ -1,4 +1,4 @@
-import { Vec3 } from "./Vec3";
+import { Vec3 } from './Vec3';
 
 export class GridCamera {
   private dragCameraStartX = 0;
@@ -57,7 +57,7 @@ export class GridCamera {
     this._position.x = this.dragCameraStartX + (this.dragCursorStartX - dragX);
     this._position.y = this.dragCameraStartY + (this.dragCursorStartY - dragY);
 
-    console.log("Position", this._position);
+    console.log('Position', this._position);
   }
 
   public right(): void {

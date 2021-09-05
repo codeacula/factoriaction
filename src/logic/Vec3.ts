@@ -14,7 +14,7 @@ export class Vec3 {
    * @param num
    * @returns
    */
-  public add(num: number) {
+  public add(num: number): Vec3 {
     return new Vec3(this.x + num, this.y + num, this.z + num);
   }
 
@@ -24,12 +24,8 @@ export class Vec3 {
    * @param providedVec
    * @returns
    */
-  public static add(targetVec: Vec3, providedVec: Vec3) {
-    return new Vec3(
-      targetVec.x + providedVec.x,
-      targetVec.y + providedVec.y,
-      targetVec.z + providedVec.z
-    );
+  public static add(targetVec: Vec3, providedVec: Vec3): Vec3 {
+    return new Vec3(targetVec.x + providedVec.x, targetVec.y + providedVec.y, targetVec.z + providedVec.z);
   }
 
   /**
@@ -37,7 +33,7 @@ export class Vec3 {
    * @param num
    * @returns
    */
-  public div(num: number) {
+  public div(num: number): Vec3 {
     return new Vec3(this.x / num, this.y / num, this.z / num);
   }
 
@@ -47,19 +43,15 @@ export class Vec3 {
    * @param providedVec
    * @returns
    */
-  public static div(targetVec: Vec3, providedVec: Vec3) {
-    return new Vec3(
-      targetVec.x / providedVec.x,
-      targetVec.y / providedVec.y,
-      targetVec.z / providedVec.z
-    );
+  public static div(targetVec: Vec3, providedVec: Vec3): Vec3 {
+    return new Vec3(targetVec.x / providedVec.x, targetVec.y / providedVec.y, targetVec.z / providedVec.z);
   }
 
   /**
    * Return the current vector with its properties floor'd
    * @returns
    */
-  public floor() {
+  public floor(): Vec3 {
     return new Vec3(Math.floor(this.x), Math.floor(this.y), Math.floor(this.z));
   }
 
@@ -68,7 +60,7 @@ export class Vec3 {
    * @param num
    * @returns
    */
-  public mod(num: number) {
+  public mod(num: number): Vec3 {
     return new Vec3(this.x % num, this.y % num, this.z % num);
   }
 
@@ -78,12 +70,8 @@ export class Vec3 {
    * @param providedVec
    * @returns
    */
-  public static mod(targetVec: Vec3, providedVec: Vec3) {
-    return new Vec3(
-      targetVec.x % providedVec.x,
-      targetVec.y % providedVec.y,
-      targetVec.z % providedVec.z
-    );
+  public static mod(targetVec: Vec3, providedVec: Vec3): Vec3 {
+    return new Vec3(targetVec.x % providedVec.x, targetVec.y % providedVec.y, targetVec.z % providedVec.z);
   }
 
   /**
@@ -91,7 +79,7 @@ export class Vec3 {
    * @param num
    * @returns
    */
-  public mul(num: number) {
+  public mul(num: number): Vec3 {
     return new Vec3(this.x * num, this.y * num, this.z * num);
   }
 
@@ -101,12 +89,8 @@ export class Vec3 {
    * @param providedVec
    * @returns
    */
-  public static mul(targetVec: Vec3, providedVec: Vec3) {
-    return new Vec3(
-      targetVec.x * providedVec.x,
-      targetVec.y * providedVec.y,
-      targetVec.z * providedVec.z
-    );
+  public static mul(targetVec: Vec3, providedVec: Vec3): Vec3 {
+    return new Vec3(targetVec.x * providedVec.x, targetVec.y * providedVec.y, targetVec.z * providedVec.z);
   }
 
   /**
@@ -114,7 +98,7 @@ export class Vec3 {
    * @param num
    * @returns
    */
-  public sub(num: number) {
+  public sub(num: number): Vec3 {
     return new Vec3(this.x - num, this.y - num, this.z - num);
   }
 
@@ -124,11 +108,7 @@ export class Vec3 {
    * @param providedVec
    * @returns
    */
-  public static sub(targetVec: Vec3, providedVec: Vec3) {
-    return new Vec3(
-      targetVec.x - providedVec.x,
-      targetVec.y - providedVec.y,
-      targetVec.z - providedVec.z
-    );
+  public static sub(targetVec: Vec3, providedVec: Vec3): Vec3 {
+    return new Vec3(targetVec.x - providedVec.x, targetVec.y - providedVec.y, targetVec.z - providedVec.z);
   }
 }

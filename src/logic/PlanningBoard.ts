@@ -1,9 +1,9 @@
-import { Buildable } from "./Buildable";
-import { GridCamera } from "./GridCamera";
-import { GridRenderer } from "./GridRenderer";
-import { MouseButtons } from "./MouseButtons";
-import { PlanningGrid } from "./PlanningGrid";
-import { Vec3 } from "./Vec3";
+import { Buildable } from './Buildable';
+import { GridCamera } from './GridCamera';
+import { GridRenderer } from './GridRenderer';
+import { MouseButtons } from './MouseButtons';
+import { PlanningGrid } from './PlanningGrid';
+import { Vec3 } from './Vec3';
 
 export class PlanningBoard {
   constructor(canvas: HTMLCanvasElement) {
@@ -16,48 +16,38 @@ export class PlanningBoard {
     this.gridCamera = new GridCamera();
     this.planningGrid = new PlanningGrid();
 
-    this.gridRenderer = new GridRenderer(
-      this.providedCanvas,
-      this.planningGrid,
-      this.gridCamera
-    );
+    this.gridRenderer = new GridRenderer(this.providedCanvas, this.planningGrid, this.gridCamera);
 
-    this.providedCanvas.addEventListener("mousedown", (ev: MouseEvent) => {
+    this.providedCanvas.addEventListener('mousedown', (ev: MouseEvent) => {
       if (ev.button == MouseButtons.Right) {
-        this.providedCanvas.style.cursor = "grab";
+        this.providedCanvas.style.cursor = 'grab';
         this.gridCamera.startDragging(ev.offsetX, ev.offsetY);
         this.isDraggingCamera = true;
         ev.preventDefault();
       }
     });
 
-    this.providedCanvas.addEventListener("mousemove", (ev: MouseEvent) => {
+    this.providedCanvas.addEventListener('mousemove', (ev: MouseEvent) => {
       if (this.isDraggingCamera) {
         this.gridCamera.mouseDragged(ev.offsetX, ev.offsetY);
         this.gridRenderer.render();
       }
 
-      if (
-        this.currentlySelectedBuildable &&
-        this.currentlySelectedBuildableImg
-      ) {
-        this.gridRenderer.render(
-          this.currentlySelectedBuildableImg,
-          new Vec3(ev.offsetX, ev.offsetY)
-        );
+      if (this.currentlySelectedBuildable && this.currentlySelectedBuildableImg) {
+        this.gridRenderer.render(this.currentlySelectedBuildableImg, new Vec3(ev.offsetX, ev.offsetY));
       }
     });
 
-    this.providedCanvas.addEventListener("mouseup", (ev: MouseEvent) => {
+    this.providedCanvas.addEventListener('mouseup', (ev: MouseEvent) => {
       // Right mouse button
       if (ev.button == MouseButtons.Right) {
-        this.providedCanvas.style.cursor = "auto";
+        this.providedCanvas.style.cursor = 'auto';
         this.isDraggingCamera = false;
         ev.preventDefault();
       }
     });
 
-    this.providedCanvas.addEventListener("wheel", (ev: WheelEvent) => {
+    this.providedCanvas.addEventListener('wheel', (ev: WheelEvent) => {
       if (ev.deltaY < 0) {
         this.gridCamera.down({ x: ev.offsetX, y: ev.offsetY });
       } else {
@@ -65,20 +55,17 @@ export class PlanningBoard {
       }
 
       this.gridRenderer.render();
-      this.gridRenderer.render(
-        this.currentlySelectedBuildableImg ?? undefined,
-        new Vec3(ev.offsetX, ev.offsetY)
-      );
+      this.gridRenderer.render(this.currentlySelectedBuildableImg ?? undefined, new Vec3(ev.offsetX, ev.offsetY));
     });
 
-    window.addEventListener("keydown", (ev: KeyboardEvent) => {
-      if (ev.key == "Escape") {
+    window.addEventListener('keydown', (ev: KeyboardEvent) => {
+      if (ev.key == 'Escape') {
         this.cancelSelection();
         this.gridRenderer.render();
       }
     });
 
-    window.addEventListener("resize", () => {
+    window.addEventListener('resize', () => {
       this.recalculateCanvasAndRender();
     });
 
@@ -119,8 +106,6 @@ export class PlanningBoard {
     }
 
     this.currentlySelectedBuildable = buildable;
-    this.currentlySelectedBuildableImg = this.imageCache.get(
-      buildable.name
-    ) as CanvasImageSource;
+    this.currentlySelectedBuildableImg = this.imageCache.get(buildable.name) as CanvasImageSource;
   }
 }

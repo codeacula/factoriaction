@@ -1,4 +1,4 @@
-import { GridCamera, GridRenderer, PlanningGrid } from ".";
+import { GridCamera, GridRenderer, PlanningGrid } from '.';
 
 export interface ActionInjectables {
   gridCamera: GridCamera;

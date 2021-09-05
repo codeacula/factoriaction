@@ -1,22 +1,22 @@
 <template lang="pug">
 .app-wrapper.full-size
   nav.navigation
-    router-link(:to="{ name: 'Home' }") Home
-    router-link(:to="{ name: 'About' }") About
-    a(href="#", @click="showBuildMenu()") Build (Q)
-    a(href="#", @click="showHelpMenu()") Help
+    router-link(:to='{ name: "Home" }') Home
+    router-link(:to='{ name: "About" }') About
+    a(href='#' @click='showBuildMenu()') Build (Q)
+    a(href='#' @click='showHelpMenu()') Help
   router-view.main-content
-  HelpMenu(v-show="shouldShowHelpMenu", @close="closeHelpMenu()")
+  HelpMenu(v-show='shouldShowHelpMenu' @close='closeHelpMenu()')
 </template>
 
 <script lang="ts">
-import { defineComponent } from "@vue/runtime-core";
-import { ref } from "vue";
+import { defineComponent } from '@vue/runtime-core';
+import { ref } from 'vue';
 
-import HelpMenu from "@/components/HelpMenu.vue";
+import HelpMenu from '@/components/HelpMenu.vue';
 
 export default defineComponent({
-  name: "App",
+  name: 'App',
   components: { HelpMenu },
   setup() {
     const shouldShowHelpMenu = ref(false);
@@ -26,7 +26,7 @@ export default defineComponent({
     };
 
     const showBuildMenu = () => {
-      window.dispatchEvent(new KeyboardEvent("keydown", { key: "q" }));
+      window.dispatchEvent(new KeyboardEvent('keydown', { key: 'q' }));
     };
 
     const showHelpMenu = () => {
@@ -44,7 +44,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@import "@/sass/main.scss";
+@import '@/sass/main.scss';
 
 .app-wrapper {
   display: grid;

@@ -1,30 +1,24 @@
-import { GridCamera } from "./GridCamera";
-import { GridCell } from "./GridCell";
-import { PlanningGrid } from "./PlanningGrid";
-import { Vec3 } from "./Vec3";
+import { GridCamera } from './GridCamera';
+import { GridCell } from './GridCell';
+import { PlanningGrid } from './PlanningGrid';
+import { Vec3 } from './Vec3';
 
 export class GridRenderer {
-  constructor(
-    canvas: HTMLCanvasElement,
-    grid: PlanningGrid,
-    camera: GridCamera
-  ) {
+  constructor(canvas: HTMLCanvasElement, grid: PlanningGrid, camera: GridCamera) {
     this.camera = camera;
     this.canvas = canvas;
     this.grid = grid;
 
-    const drawingContext = this.canvas.getContext("2d", {
+    const drawingContext = this.canvas.getContext('2d', {
       alpha: true,
     });
 
     if (!drawingContext) {
-      throw new Error(
-        "Unable to get a drawing context from the provided canvas"
-      );
+      throw new Error('Unable to get a drawing context from the provided canvas');
     }
 
     this.context = drawingContext;
-    this.context.font = `16px "Roboto Mono"`;
+    this.context.font = '16px "Roboto Mono"';
   }
 
   private camera: GridCamera;
@@ -56,14 +50,8 @@ export class GridRenderer {
 
     // Where is the top left point at on the planning grid?
     const diffBetweenTopLeftAndCenter = Vec3.sub(canvasStartingPoint, topLeft);
-    const topLeftPlanningGrid = Vec3.sub(
-      planningGridOrigin,
-      diffBetweenTopLeftAndCenter.div(pixelsBetweenLines)
-    );
-    const topLeftOriginGrid = Vec3.sub(
-      new Vec3(0, 0),
-      diffBetweenTopLeftAndCenter.div(pixelsBetweenLines)
-    );
+    const topLeftPlanningGrid = Vec3.sub(planningGridOrigin, diffBetweenTopLeftAndCenter.div(pixelsBetweenLines));
+    const topLeftOriginGrid = Vec3.sub(new Vec3(0, 0), diffBetweenTopLeftAndCenter.div(pixelsBetweenLines));
 
     for (let x = 0; x < totalUnits.x; x++) {
       const currentArr = new Array<GridCell>();
@@ -73,18 +61,9 @@ export class GridRenderer {
         const yCanvasOffset = y * pixelsBetweenLines;
 
         currentArr.push({
-          canvasLocation: new Vec3(
-            topLeft.x + xCanvasOffset,
-            topLeft.y + yCanvasOffset
-          ),
-          localGridLocation: new Vec3(
-            topLeftOriginGrid.x + x,
-            topLeftOriginGrid.y + y
-          ),
-          planningGridLocation: new Vec3(
-            topLeftPlanningGrid.x + x,
-            topLeftPlanningGrid.y + y
-          ),
+          canvasLocation: new Vec3(topLeft.x + xCanvasOffset, topLeft.y + yCanvasOffset),
+          localGridLocation: new Vec3(topLeftOriginGrid.x + x, topLeftOriginGrid.y + y),
+          planningGridLocation: new Vec3(topLeftPlanningGrid.x + x, topLeftPlanningGrid.y + y),
         });
       }
     }
@@ -145,11 +124,7 @@ export class GridRenderer {
         let xcoord = cell.canvasLocation.x;
         xcoord += Number.isInteger(cell.canvasLocation.x) ? this.drawOffset : 0;
 
-        this.drawLine(
-          new Vec3(xcoord, 0),
-          new Vec3(xcoord, this.canvas.height),
-          color
-        );
+        this.drawLine(new Vec3(xcoord, 0), new Vec3(xcoord, this.canvas.height), color);
       }
     });
   }
@@ -167,11 +142,7 @@ export class GridRenderer {
         let ycoord = cell.canvasLocation.y;
         ycoord += Number.isInteger(cell.canvasLocation.y) ? this.drawOffset : 0;
 
-        this.drawLine(
-          new Vec3(0, ycoord),
-          new Vec3(this.canvas.width, ycoord),
-          color
-        );
+        this.drawLine(new Vec3(0, ycoord), new Vec3(this.canvas.width, ycoord), color);
       }
     });
   }
@@ -190,21 +161,13 @@ export class GridRenderer {
 
     // Figure out how many pixels the grid translates to for when we need to find the drawing
     // start point
-    const gridCenterPixelAmount = cameraPlanningGridCenter.mul(
-      this.getPixelsBetweenLines()
-    ); // -> [-615, -825]
+    const gridCenterPixelAmount = cameraPlanningGridCenter.mul(this.getPixelsBetweenLines()); // -> [-615, -825]
 
     // How many pixels is the current snapping point off from the camera position
-    const offsetFromCamera = Vec3.sub(
-      this.camera.position,
-      gridCenterPixelAmount
-    );
+    const offsetFromCamera = Vec3.sub(this.camera.position, gridCenterPixelAmount);
 
     // Get the canvas location of where the grid starting point should be
-    const localGridCanvasCenter = Vec3.sub(
-      this.centerOfCanvas,
-      offsetFromCamera
-    );
+    const localGridCanvasCenter = Vec3.sub(this.centerOfCanvas, offsetFromCamera);
 
     return localGridCanvasCenter;
   }
@@ -215,8 +178,7 @@ export class GridRenderer {
    * @returns
    */
   private getPixelsBetweenLines(unitsApart = 1): number {
-    const sizeOfUnitsAdjustedForCamera =
-      this.sizeOfUnitInPixels * this.camera.position.z;
+    const sizeOfUnitsAdjustedForCamera = this.sizeOfUnitInPixels * this.camera.position.z;
     return sizeOfUnitsAdjustedForCamera * unitsApart;
   }
 
@@ -270,10 +232,7 @@ export class GridRenderer {
 
     xVals.forEach((cell) => {
       if (cell.planningGridLocation.x % 8 == 0) {
-        this.writeText(
-          cell.planningGridLocation.x.toLocaleString(),
-          new Vec3(cell.canvasLocation.x + 3, 10)
-        );
+        this.writeText(cell.planningGridLocation.x.toLocaleString(), new Vec3(cell.canvasLocation.x + 3, 10));
       }
     });
   }
@@ -283,11 +242,7 @@ export class GridRenderer {
 
     yVals.forEach((cell) => {
       if (cell.planningGridLocation.y % 8 == 0) {
-        this.writeText(
-          cell.planningGridLocation.y.toLocaleString(),
-          new Vec3(2, cell.canvasLocation.y - 2),
-          "#c3a6ff"
-        );
+        this.writeText(cell.planningGridLocation.y.toLocaleString(), new Vec3(2, cell.canvasLocation.y - 2), '#c3a6ff');
       }
     });
   }
@@ -314,8 +269,8 @@ export class GridRenderer {
   public render(image?: CanvasImageSource, coords?: Vec3): void {
     this.clear();
     this.buildScene();
-    this.drawGrid(1, "#2f3b54");
-    this.drawGrid(8, "#8695b7");
+    this.drawGrid(1, '#2f3b54');
+    this.drawGrid(8, '#8695b7');
     this.printColumnNumbers();
     this.printRowNumbers();
 
@@ -324,7 +279,7 @@ export class GridRenderer {
     }
   }
 
-  private writeText(text: string, position: Vec3, color = "#bae67e") {
+  private writeText(text: string, position: Vec3, color = '#bae67e') {
     this.context.fillStyle = color;
     this.context.fillText(text, position.x, position.y);
   }
