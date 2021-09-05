@@ -14,12 +14,12 @@
         .item-list-wrapper
           .item-group(v-for='group in groups')
             h3.item-group-header {{ group }}
-              BuildableItemButton(
-                v-for='item in getItemsByGroup(group)'
-                class='item'
-                :item='item'
-                @click='$emit("buildable-selected", item)'
-              )
+            BuildableItemButton(
+              v-for='item in getItemsByGroup(group)'
+              class='item'
+              :item='item'
+              @click='$emit("buildable-selected", item)'
+            )
 </template>
 
 <script lang="ts">
@@ -116,7 +116,7 @@ export default defineComponent({
   overflow: hidden;
   position: absolute;
   right: 5%;
-  width: 50%;
+  width: 30%;
 }
 
 .build-menu-header {
