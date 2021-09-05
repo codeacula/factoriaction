@@ -28,14 +28,14 @@ export default defineComponent({
 @import '@/sass/variables.scss';
 
 .buildable-item-button {
+  background-color: rgba($dark-4, 0);
+  border-radius: 5px;
   cursor: pointer;
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
   min-width: 8rem;
+  overflow-y: auto;
   padding: 1rem;
-  border-radius: 5px;
-  background-color: rgba($dark-4, 0);
   transition: background-color 0.2s;
 
   &:hover {
@@ -44,8 +44,8 @@ export default defineComponent({
 }
 
 .button-text {
-  overflow: hidden;
   margin-top: 0.1rem;
+  overflow: hidden;
   text-overflow: ellipsis;
   text-align: center;
   white-space: nowrap;
