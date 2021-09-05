@@ -15,9 +15,8 @@
           .item-group(v-for='group in groups')
             h3.item-group-header {{ group }}
             ul.item-list
-              BuildableItemButton(
-                v-for='item in getItemsByGroup(group)'
-                class='item'
+              BuildableItemButton.item(
+                v-for='item in getItemsByGroup(group)',
                 :item='item'
                 @click='$emit("buildable-selected", item)'
               )
