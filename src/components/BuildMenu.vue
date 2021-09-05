@@ -15,7 +15,11 @@
           .item-group(v-for='group in groups')
             h3.item-group-header {{ group }}
             ul.item-list
-              li.item(v-for='item in getItemsByGroup(group)' @click='$emit("buildable-selected", item)') {{ item.name }}
+              BuildableItemButton.item(
+                v-for='item in getItemsByGroup(group)',
+                :item='item'
+                @click='$emit("buildable-selected", item)'
+              )
 </template>
 
 <script lang="ts">
@@ -23,11 +27,13 @@ import { Buildable } from '@/logic';
 import { computed, defineComponent } from '@vue/runtime-core';
 import { ref } from 'vue';
 
+import BuildableItemButton from '@/components/BuildableItemButton.vue';
 import buildables from '@/data/buildables.json';
 import { Tabs } from './Tabs';
 
 export default defineComponent({
   name: 'BuildMenu',
+  components: { BuildableItemButton },
   emits: {
     'buildable-selected': (buildable: Buildable) => buildable,
     close: () => true,
@@ -69,6 +75,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 @import '@/sass/variables.scss';
+
 .build-menu {
   align-items: center;
   background-color: rgba(0, 0, 0, 0.7);
@@ -86,7 +93,9 @@ export default defineComponent({
   flex-direction: column;
   height: 90%;
   overflow: hidden;
-  width: 50%;
+  position: absolute;
+  right: 5%;
+  width: 25%;
 }
 
 .build-menu-header {
@@ -173,25 +182,12 @@ export default defineComponent({
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  margin: 0;
+  gap: 0.5rem;
   list-style-type: none;
-  padding: 0;
+  margin: 0;
+  padding: 1rem;
 }
 .item {
-  align-items: center;
-  cursor: pointer;
-  justify-content: center;
-  display: flex;
-  text-align: center;
   width: 25%;
-  &:after {
-    content: '';
-    display: block;
-    padding-bottom: 90%;
-  }
-
-  &:hover {
-    background-color: $dark-4;
-  }
 }
 </style>

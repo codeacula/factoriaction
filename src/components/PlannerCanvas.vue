@@ -1,6 +1,11 @@
 <template lang="pug">
 .planner-canvas-wrapper.full-size
-  BuildMenu(v-show='shouldShowBuildMenu' @close='closeBuildMenu()' @buildable-selected='selectBuildable')
+  BuildMenu(
+    v-show='shouldShowBuildMenu'
+    :class='{ "anim-fade-in": shouldShowBuildMenu }'
+    @close='closeBuildMenu()'
+    @buildable-selected='selectBuildable'
+  )
   canvas.planner-canvas.full-size(ref='planner')
 </template>
 
