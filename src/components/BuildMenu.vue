@@ -14,8 +14,12 @@
         .item-list-wrapper
           .item-group(v-for='group in groups')
             h3.item-group-header {{ group }}
-            ul.item-list
-              li.item(v-for='item in getItemsByGroup(group)' @click='$emit("buildable-selected", item)') {{ item.name }}
+              BuildableItemButton(
+                v-for='item in getItemsByGroup(group)'
+                class='item'
+                :item='item'
+                @click='$emit("buildable-selected", item)'
+              )
 </template>
 
 <script lang="ts">
@@ -23,11 +27,13 @@ import { Buildable } from '@/logic';
 import { computed, defineComponent } from '@vue/runtime-core';
 import { ref } from 'vue';
 
+import BuildableItemButton from '@/components/BuildableItemButton.vue';
 import buildables from '@/data/buildables.json';
 import { Tabs } from './Tabs';
 
 export default defineComponent({
   name: 'BuildMenu',
+  components: { BuildableItemButton },
   emits: {
     'buildable-selected': (buildable: Buildable) => buildable,
     close: () => true,
@@ -202,20 +208,6 @@ export default defineComponent({
   padding: 0;
 }
 .item {
-  align-items: center;
-  cursor: pointer;
-  justify-content: center;
-  display: flex;
-  text-align: center;
   width: 25%;
-  &:after {
-    content: '';
-    display: block;
-    padding-bottom: 90%;
-  }
-
-  &:hover {
-    background-color: $dark-4;
-  }
 }
 </style>
