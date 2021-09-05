@@ -28,21 +28,23 @@ export default defineComponent({
 @import '@/sass/variables.scss';
 
 .buildable-item-button {
+  cursor: pointer;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
   min-width: 8rem;
   padding: 1rem;
-  cursor: pointer;
   &:hover {
     background-color: $dark-4;
   }
 }
 
 .button-text {
+  overflow: hidden;
   margin-top: 0.1rem;
-  width: 10rem;
-  white-space: nowrap;
   text-overflow: ellipsis;
+  text-align: center;
+  white-space: nowrap;
+  width: 100%;
 }
 </style>
