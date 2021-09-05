@@ -254,6 +254,7 @@ export class GridRenderer {
       return;
     }
 
+    this.context.globalAlpha = 0.5;
     this.context.drawImage(
       image,
       snapPos.x,
@@ -261,6 +262,7 @@ export class GridRenderer {
       (image.width as number) * this.camera.z,
       (image.height as number) * this.camera.z
     );
+    this.context.globalAlpha = 1;
   }
 
   /**
