@@ -13,7 +13,7 @@ export class PlanningBoardController {
   constructor(canvas: HTMLCanvasElement) {
     this.setupCanvas(canvas);
     this.bindActionsToWindow();
-    this.gridRenderer = new GridRenderer(this.providedCanvas, this.planningGrid, this.gridCamera);
+    this.gridRenderer = new GridRenderer(this.providedCanvas, this.gridCamera);
 
     this.recalculateCanvasAndRender();
   }
@@ -51,9 +51,22 @@ export class PlanningBoardController {
   }
 
   private onMouseDown(ev: MouseEvent): void {
-    if (ev.button == MouseButtons.Right) {
+    const eventLoc = convertToVec3(ev);
+    if (ev.button == MouseButtons.Left) {
+      if (this.currentlySelectedBuildable) {
+        const mouseGridPos = this.gridRenderer.getPlanningGridLocation(eventLoc);
+
+        if (!mouseGridPos) {
+          throw new Error(
+            `Unable to locate a grid cell from the following canvas location - X:${eventLoc.x} Y:${eventLoc.y}`
+          );
+        }
+
+        this.planningGrid.place(this.currentlySelectedBuildable, mouseGridPos);
+      }
+    } else if (ev.button == MouseButtons.Right) {
       this.providedCanvas.style.cursor = 'grab';
-      this.gridCamera.startDragging(convertToVec3(ev));
+      this.gridCamera.startDragging(eventLoc);
       this.isDraggingCamera = true;
       ev.preventDefault();
     }
@@ -101,7 +114,7 @@ export class PlanningBoardController {
       this.providedCanvas.height = this.canvasParent.clientHeight;
     }
 
-    this.gridRenderer.calculateDeadCenter();
+    this.gridRenderer.calculateCenterOfCanvas();
     this.gridRenderer.render();
   }
 
