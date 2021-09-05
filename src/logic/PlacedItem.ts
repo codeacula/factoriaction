@@ -1,12 +1,12 @@
-import { Buildable, Vec3 } from '.';
+import { Buildable, Placeable, Vec3 } from '.';
 import { BoundingBox } from './BoundingBox';
 
 export class PlacedItem {
-  constructor(buildable: Buildable, position: Vec3, image: CanvasImageSource) {
-    this.buildable = buildable;
-    this.image = image;
-    this.position = position;
-    this.boundingBox = BoundingBox.fromSize(position, new Vec3(this.buildable.width, this.buildable.height));
+  constructor(placeable: Placeable) {
+    this.buildable = placeable.buildable;
+    this.image = placeable.image;
+    this.position = placeable.position;
+    this.boundingBox = BoundingBox.fromSize(placeable.position, new Vec3(this.buildable.width, this.buildable.height));
   }
 
   private boundingBox: BoundingBox;

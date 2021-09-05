@@ -1,4 +1,6 @@
-import { PlacedItem } from '.';
+import { Placeable, PlacedItem } from '.';
+import { ActionInjectables } from './ActionInjectables';
+import { PlaceBuildable, PlanningAction } from './Actions';
 import { Buildable } from './Buildable';
 import { GridCamera } from './GridCamera';
 import { GridRenderer } from './GridRenderer';
@@ -19,6 +21,7 @@ export class PlanningBoardController {
     this.recalculateCanvasAndRender();
   }
 
+  private actionQueue: PlanningAction[] = [];
   private canvasParent!: HTMLElement | null;
   private currentlySelectedBuildable: Buildable | null = null;
   private currentlySelectedBuildableImg: CanvasImageSource | null = null;
@@ -44,6 +47,14 @@ export class PlanningBoardController {
     this.render();
   }
 
+  public get injectables(): ActionInjectables {
+    return {
+      gridCamera: this.gridCamera,
+      gridRenderer: this.gridRenderer,
+      planningGrid: this.planningGrid,
+    };
+  }
+
   private onKeyDown(ev: KeyboardEvent): void {
     if (ev.key == 'Escape') {
       this.cancelSelection();
@@ -56,7 +67,15 @@ export class PlanningBoardController {
     if (ev.button == MouseButtons.Left) {
       if (this.currentlySelectedBuildable && this.currentlySelectedBuildableImg) {
         const mouseGridPos = this.gridRenderer.getPlanningGridLocation(eventLoc);
-        this.planningGrid.place(this.currentlySelectedBuildable, mouseGridPos, this.currentlySelectedBuildableImg);
+        const placeable: Placeable = {
+          buildable: this.currentlySelectedBuildable,
+          image: this.currentlySelectedBuildableImg,
+          position: mouseGridPos,
+        };
+
+        const placeAction = new PlaceBuildable(placeable);
+        placeAction.commit(this.injectables);
+        this.actionQueue.push(placeAction);
         this.render();
       }
     } else if (ev.button == MouseButtons.Right) {
@@ -175,10 +194,10 @@ export class PlanningBoardController {
     }
 
     const planningGridLoc = this.gridRenderer.getPlanningGridLocation(pos);
-    this.gridRenderer.currentlySelectedItem = new PlacedItem(
-      this.currentlySelectedBuildable,
-      planningGridLoc,
-      this.currentlySelectedBuildableImg
-    );
+    this.gridRenderer.currentlySelectedItem = new PlacedItem({
+      buildable: this.currentlySelectedBuildable,
+      image: this.currentlySelectedBuildableImg,
+      position: planningGridLoc,
+    });
   }
 }
