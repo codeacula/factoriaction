@@ -55,6 +55,10 @@ export class Vec3 {
     return new Vec3(targetVec.x / providedVec.x, targetVec.y / providedVec.y, targetVec.z / providedVec.z);
   }
 
+  public equal(compareTo: Vec3): boolean {
+    return this.x == compareTo.x && this.y == compareTo.y && this.z == compareTo.z;
+  }
+
   /**
    * Return the current vector with its properties floor'd
    * @returns

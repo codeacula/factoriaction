@@ -14,7 +14,8 @@ export class PlaceBuildable implements PlanningAction {
     return;
   }
 
-  revert(): void {
+  revert(injectable: ActionInjectables): void {
+    injectable.planningGrid.remove(this.placeable);
     return;
   }
 }

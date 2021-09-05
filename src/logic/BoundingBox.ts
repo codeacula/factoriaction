@@ -13,6 +13,18 @@ export class BoundingBox {
     return point.x >= this.from.x && point.x <= this.to.x && point.y >= this.from.y && point.y < this.to.y;
   }
 
+  public equal(compareTo: BoundingBox): boolean {
+    if (this.from.x != compareTo.from.x || this.from.y != compareTo.from.y) {
+      return false;
+    }
+
+    if (this.from.y != compareTo.from.y || this.from.y != compareTo.from.y) {
+      return false;
+    }
+
+    return true;
+  }
+
   public static fromSize(origin: Vec3, size: Vec3): BoundingBox {
     return new BoundingBox(origin, new Vec3(origin.x + size.x, origin.y + size.y));
   }

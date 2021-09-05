@@ -31,6 +31,7 @@ export class PlanningBoardController {
   private planningGrid = new PlanningGrid();
   private providedCanvas!: HTMLCanvasElement;
   private imageCache: Map<string, CanvasImageSource> = new Map();
+  private redoQueue: PlanningAction[] = [];
 
   private bindActionsToWindow(): void {
     window.addEventListener('keydown', (ev) => {
@@ -59,6 +60,10 @@ export class PlanningBoardController {
     if (ev.key == 'Escape') {
       this.cancelSelection();
       this.render();
+    } else if (ev.key == 'z' && ev.ctrlKey) {
+      this.undoLastAction();
+    } else if (ev.key == 'y' && ev.ctrlKey) {
+      this.redoLastAction();
     }
   }
 
@@ -73,9 +78,7 @@ export class PlanningBoardController {
           position: mouseGridPos,
         };
 
-        const placeAction = new PlaceBuildable(placeable);
-        placeAction.commit(this.injectables);
-        this.actionQueue.push(placeAction);
+        this.sendAction(new PlaceBuildable(placeable));
         this.render();
       }
     } else if (ev.button == MouseButtons.Right) {
@@ -135,6 +138,20 @@ export class PlanningBoardController {
     this.render();
   }
 
+  private redoLastAction(): void {
+    console.log(this.redoQueue);
+    const lastaction = this.redoQueue.pop();
+
+    if (!lastaction) {
+      return;
+    }
+
+    // We can't do sendAction because it clears the redo queue
+    lastaction.commit(this.injectables);
+    this.actionQueue.push(lastaction);
+    this.render();
+  }
+
   private render(): void {
     this.gridRenderer.render();
   }
@@ -153,6 +170,12 @@ export class PlanningBoardController {
 
     this.currentlySelectedBuildable = buildable;
     this.currentlySelectedBuildableImg = this.imageCache.get(buildable.name) as CanvasImageSource;
+  }
+
+  private sendAction(action: PlanningAction) {
+    action.commit(this.injectables);
+    this.actionQueue.push(action);
+    this.redoQueue = [];
   }
 
   /**
@@ -181,6 +204,18 @@ export class PlanningBoardController {
     this.providedCanvas.addEventListener('wheel', (ev) => {
       this.onMouseWheel(ev);
     });
+  }
+
+  private undoLastAction(): void {
+    const lastaction = this.actionQueue.pop();
+
+    if (!lastaction) {
+      return;
+    }
+
+    lastaction.revert(this.injectables);
+    this.redoQueue.push(lastaction);
+    this.render();
   }
 
   /**
