@@ -68,6 +68,13 @@ export class Vec3 {
   }
 
   /**
+   * Swap the Vec3's x and y values
+   */
+  public flip(): Vec3 {
+    return new Vec3(this.y, this.x);
+  }
+
+  /**
    * Modulo the properties of the vector by the provided values
    * @param num
    * @returns

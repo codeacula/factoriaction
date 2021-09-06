@@ -12,6 +12,12 @@ function convertToVec3(ev: MouseEvent | WheelEvent): Vec3 {
   return new Vec3(ev.offsetX, ev.offsetY);
 }
 
+enum States {
+  None,
+  Dragging,
+  Rotating,
+}
+
 export class PlanningBoardController {
   constructor(canvas: HTMLCanvasElement) {
     this.setupCanvas(canvas);
@@ -24,9 +30,9 @@ export class PlanningBoardController {
   private actionQueue: PlanningAction[] = [];
   private canvasParent!: HTMLElement | null;
   private currentlySelectedPlaceable: Placeable | null = null;
+  private currentState = States.None;
   private gridCamera = new GridCamera();
   private gridRenderer: GridRenderer;
-  private isDraggingCamera = false;
   private planningGrid = new PlanningGrid();
   private providedCanvas!: HTMLCanvasElement;
   private imageCache: Map<string, CanvasImageSource> = new Map();
@@ -84,14 +90,14 @@ export class PlanningBoardController {
     } else if (ev.button == MouseButtons.Right) {
       this.providedCanvas.style.cursor = 'grab';
       this.gridCamera.startDragging(eventLoc);
-      this.isDraggingCamera = true;
+      this.currentState = States.Dragging;
       ev.preventDefault();
     }
   }
 
   private onMouseMove(ev: MouseEvent): void {
     const eventLoc = convertToVec3(ev);
-    if (this.isDraggingCamera) {
+    if (this.currentState == States.Dragging) {
       this.gridCamera.mouseDragged(eventLoc);
       this.render();
     }
@@ -106,7 +112,7 @@ export class PlanningBoardController {
     // Right mouse button
     if (ev.button == MouseButtons.Right) {
       this.providedCanvas.style.cursor = 'auto';
-      this.isDraggingCamera = false;
+      this.currentState = States.None;
       ev.preventDefault();
     }
   }
