@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Placeable, PlacedItem, PlanningGrid } from '.';
 import { BoundingBox } from './BoundingBox';
 import { GridCamera } from './GridCamera';
