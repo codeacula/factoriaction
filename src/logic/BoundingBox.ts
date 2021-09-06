@@ -30,6 +30,19 @@ export class BoundingBox {
   }
 
   public touches(boundingBox: BoundingBox): boolean {
-    return boundingBox.contains(this.from) || boundingBox.contains(this.to);
+    // Top left and bottom right corners
+    if (boundingBox.contains(this.from) || boundingBox.contains(this.to)) {
+      return true;
+    }
+
+    // Top right and bottom left corners
+    if (
+      boundingBox.contains(new Vec3(this.from.x, this.to.y)) ||
+      boundingBox.contains(new Vec3(this.to.x, this.from.y))
+    ) {
+      return true;
+    }
+
+    return false;
   }
 }
