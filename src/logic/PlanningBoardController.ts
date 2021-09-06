@@ -1,4 +1,4 @@
-import { Placeable, PlacedItem } from '.';
+import { Placeable } from '.';
 import { ActionInjectables } from './ActionInjectables';
 import { PlaceBuildable, PlanningAction } from './Actions';
 import { Buildable } from './Buildable';
@@ -23,8 +23,7 @@ export class PlanningBoardController {
 
   private actionQueue: PlanningAction[] = [];
   private canvasParent!: HTMLElement | null;
-  private currentlySelectedBuildable: Buildable | null = null;
-  private currentlySelectedBuildableImg: CanvasImageSource | null = null;
+  private currentlySelectedPlaceable: Placeable | null = null;
   private gridCamera = new GridCamera();
   private gridRenderer: GridRenderer;
   private isDraggingCamera = false;
@@ -44,7 +43,8 @@ export class PlanningBoardController {
   }
 
   public cancelSelection(): void {
-    this.currentlySelectedBuildable = null;
+    this.currentlySelectedPlaceable = null;
+    this.gridRenderer.currentlySelectedItem = null;
     this.render();
   }
 
@@ -70,11 +70,11 @@ export class PlanningBoardController {
   private onMouseDown(ev: MouseEvent): void {
     const eventLoc = convertToVec3(ev);
     if (ev.button == MouseButtons.Left) {
-      if (this.currentlySelectedBuildable && this.currentlySelectedBuildableImg) {
+      if (this.currentlySelectedPlaceable) {
         const mouseGridPos = this.gridRenderer.getPlanningGridLocation(eventLoc);
         const placeable: Placeable = {
-          buildable: this.currentlySelectedBuildable,
-          image: this.currentlySelectedBuildableImg,
+          buildable: this.currentlySelectedPlaceable.buildable,
+          image: this.currentlySelectedPlaceable.image,
           position: mouseGridPos,
         };
 
@@ -96,7 +96,7 @@ export class PlanningBoardController {
       this.render();
     }
 
-    if (this.currentlySelectedBuildable && this.currentlySelectedBuildableImg) {
+    if (this.currentlySelectedPlaceable) {
       this.updateSelectedItem(eventLoc);
       this.render();
     }
@@ -139,7 +139,6 @@ export class PlanningBoardController {
   }
 
   private redoLastAction(): void {
-    console.log(this.redoQueue);
     const lastaction = this.redoQueue.pop();
 
     if (!lastaction) {
@@ -168,8 +167,11 @@ export class PlanningBoardController {
       this.imageCache.set(buildable.name, buildableImage);
     }
 
-    this.currentlySelectedBuildable = buildable;
-    this.currentlySelectedBuildableImg = this.imageCache.get(buildable.name) as CanvasImageSource;
+    this.currentlySelectedPlaceable = {
+      buildable,
+      image: this.imageCache.get(buildable.name) as CanvasImageSource,
+      position: new Vec3(),
+    };
   }
 
   private sendAction(action: PlanningAction) {
@@ -219,20 +221,10 @@ export class PlanningBoardController {
   }
 
   /**
-   * Gets the planning grid location of the provided Vec3 and updates the grid renderer with the selected buildable,
-   * if one it selected and a grid position is returned
+   * Tells the planning grid the location of the currently selected item has changed
    * @param pos The canvas location to find the planning grid coordinates from
    */
   private updateSelectedItem(pos: Vec3): void {
-    if (this.currentlySelectedBuildable == null || this.currentlySelectedBuildableImg == null) {
-      return;
-    }
-
-    const planningGridLoc = this.gridRenderer.getPlanningGridLocation(pos);
-    this.gridRenderer.currentlySelectedItem = new PlacedItem({
-      buildable: this.currentlySelectedBuildable,
-      image: this.currentlySelectedBuildableImg,
-      position: planningGridLoc,
-    });
+    this.gridRenderer.updateBuildableLocation(pos);
   }
 }
