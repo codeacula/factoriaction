@@ -1,13 +1,14 @@
+import { Placeable, PlacedItem, PlanningGrid } from '.';
+import { BoundingBox } from './BoundingBox';
 import { GridCamera } from './GridCamera';
 import { GridCell } from './GridCell';
-import { PlanningGrid } from './PlanningGrid';
 import { Vec3 } from './Vec3';
 
 export class GridRenderer {
-  constructor(canvas: HTMLCanvasElement, grid: PlanningGrid, camera: GridCamera) {
+  constructor(canvas: HTMLCanvasElement, camera: GridCamera, planningGrid: PlanningGrid) {
     this.camera = camera;
     this.canvas = canvas;
-    this.grid = grid;
+    this.planningGrid = planningGrid;
 
     const drawingContext = this.canvas.getContext('2d', {
       alpha: true,
@@ -25,19 +26,26 @@ export class GridRenderer {
   private canvas: HTMLCanvasElement;
   private centerOfCanvas: Vec3 = new Vec3();
   private context: CanvasRenderingContext2D;
+  public currentlySelectedItem: PlacedItem | null = null;
 
   // We have to offset the draw by 0.5 so that we get correct pixel sizes
   // See: https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Applying_styles_and_colors#a_linewidth_example
   private drawOffset = 0.5;
-  private grid: PlanningGrid;
 
   // How many pixels in an image represent 1m on the grid
-  private pixelsPerGrid = 10;
+  private planningGrid: PlanningGrid;
+  private planningGridBounds = new BoundingBox(new Vec3(), new Vec3());
+
   private scene = new Array<Array<GridCell>>();
+  private sceneByCanvasXY: { [x: number]: { [y: number]: GridCell } } = {};
+  private sceneByPlanningGridXY: { [x: number]: { [y: number]: GridCell } } = {};
 
   // Decides how many pixels should be between grid lines on a standard, unzoomed view
   private sizeOfUnitInPixels = 15;
 
+  /**
+   * Given the camera position, builds the graph of what coords the user should see and where
+   */
   private buildScene(): void {
     this.scene = new Array<Array<GridCell>>();
     const canvasStartingPoint = this.getPlanningGridCenterOnCanvas();
@@ -56,26 +64,43 @@ export class GridRenderer {
     const topLeftPlanningGrid = Vec3.sub(planningGridOrigin, diffBetweenTopLeftAndCenter.div(pixelsBetweenLines));
     const topLeftOriginGrid = Vec3.sub(new Vec3(0, 0), diffBetweenTopLeftAndCenter.div(pixelsBetweenLines));
 
-    for (let x = 0; x < totalUnits.x; x++) {
+    let lastYBuilt: GridCell | null = null;
+    for (let x = 0; x <= totalUnits.x; x++) {
       const currentArr = new Array<GridCell>();
       this.scene.push(currentArr);
-      for (let y = 0; y < totalUnits.y; y++) {
-        const xCanvasOffset = x * pixelsBetweenLines;
-        const yCanvasOffset = y * pixelsBetweenLines;
+      const xCanvasOffset = x * pixelsBetweenLines;
 
-        currentArr.push({
+      this.sceneByCanvasXY[xCanvasOffset] = {};
+
+      for (let y = 0; y <= totalUnits.y; y++) {
+        const yCanvasOffset = y * pixelsBetweenLines;
+        const gridCell: GridCell = {
           canvasLocation: new Vec3(topLeft.x + xCanvasOffset, topLeft.y + yCanvasOffset),
           localGridLocation: new Vec3(topLeftOriginGrid.x + x, topLeftOriginGrid.y + y),
           planningGridLocation: new Vec3(topLeftPlanningGrid.x + x, topLeftPlanningGrid.y + y),
-        });
+        };
+
+        currentArr.push(gridCell);
+        lastYBuilt = gridCell;
+
+        if (!this.sceneByPlanningGridXY[gridCell.planningGridLocation.x]) {
+          this.sceneByPlanningGridXY[gridCell.planningGridLocation.x] = {};
+        }
+
+        this.sceneByPlanningGridXY[gridCell.planningGridLocation.x][gridCell.planningGridLocation.y] = gridCell;
+        this.sceneByCanvasXY[xCanvasOffset][yCanvasOffset] = gridCell;
       }
+    }
+
+    if (lastYBuilt) {
+      this.planningGridBounds = new BoundingBox(topLeftPlanningGrid, lastYBuilt.planningGridLocation);
     }
   }
 
   /**
-   * Determine where on the canvas (0, 0) should be if the camera was dead center
+   * Determine where on the canvas local grid [0, 0] should be if the camera was dead center
    */
-  public calculateDeadCenter(): void {
+  public calculateCenterOfCanvas(): void {
     const halfX = Math.floor(this.canvas.width / 2);
     const halfY = Math.floor(this.canvas.height / 2);
     this.centerOfCanvas = new Vec3(halfX, halfY);
@@ -86,6 +111,65 @@ export class GridRenderer {
    */
   private clear() {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+  }
+
+  private drawPlacedItem(item: PlacedItem, opacity = 1) {
+    const cell = this.getCellByPlanningGrid(item.position);
+
+    const distanceFromCenter = this.getDistanceFromCenter(cell.planningGridLocation);
+    const offsetFromCanvasEdge = new Vec3(
+      Math.max(distanceFromCenter.x - this.centerOfCanvas.x, 0),
+      Math.max(distanceFromCenter.y - this.centerOfCanvas.y, 0)
+    );
+
+    const buildSize = new Vec3(
+      item.buildable.width * this.getPixelsBetweenLines(),
+      item.buildable.height * this.getPixelsBetweenLines()
+    );
+
+    this.context.globalAlpha = opacity;
+
+    if (offsetFromCanvasEdge.x == 0 && offsetFromCanvasEdge.y == 0) {
+      const snapPos = cell.canvasLocation;
+      this.context.drawImage(item.image, snapPos.x, snapPos.y, buildSize.x, buildSize.y);
+    } else {
+      const snapPos = new Vec3(
+        Math.max(this.centerOfCanvas.x - distanceFromCenter.x, 0),
+        Math.max(this.centerOfCanvas.y - distanceFromCenter.y, 0)
+      );
+
+      const imgSize = new Vec3(item.image.width as number, item.image.height as number);
+      const imgSizeWithRatio = Vec3.div(buildSize, imgSize);
+      const imgSizeWithOffset = Vec3.div(offsetFromCanvasEdge, imgSizeWithRatio);
+      const imgSizeToDraw = Vec3.sub(imgSize, imgSizeWithOffset);
+
+      const source = {
+        sx: imgSizeWithOffset.x,
+        sy: imgSizeWithOffset.y,
+        sWidth: imgSizeToDraw.x,
+        sHeight: imgSizeToDraw.y,
+      };
+
+      const destination = {
+        dx: snapPos.x,
+        dy: snapPos.y,
+        dWidth: buildSize.x - offsetFromCanvasEdge.x,
+        dHeight: buildSize.y - offsetFromCanvasEdge.y,
+      };
+
+      this.context.drawImage(
+        item.image,
+        source.sx,
+        source.sy,
+        source.sWidth,
+        source.sHeight,
+        destination.dx,
+        destination.dy,
+        destination.dWidth,
+        destination.dHeight
+      );
+    }
+    this.context.globalAlpha = 1;
   }
 
   /**
@@ -150,6 +234,43 @@ export class GridRenderer {
     });
   }
 
+  /**
+   * Given a set of planning grid coordinates, returns matching cell or throws errors
+   * @param pos
+   * @returns
+   */
+  public getCellByPlanningGrid(pos: Vec3): GridCell {
+    if (!this.sceneByPlanningGridXY[pos.x]) {
+      throw new Error(`No cell stored at X:${pos.x} location`);
+    }
+
+    if (!this.sceneByPlanningGridXY[pos.x][pos.y]) {
+      throw new Error(`No cell stored at Y:${pos.y} location`);
+    }
+
+    return this.sceneByPlanningGridXY[pos.x][pos.y];
+  }
+
+  private getDistanceFromCenter(planningGridLoc: Vec3): Vec3 {
+    // If we're in the planning grid, there's no off screen distance to worry about
+    if (this.planningGridBounds.contains(planningGridLoc)) {
+      return new Vec3(0, 0);
+    }
+
+    const cameraGridPos = this.getPlanningGridCameraLocation();
+    const diffBetweenLocAndCamera = Vec3.sub(cameraGridPos, planningGridLoc);
+    const diffConvertedToPixels = diffBetweenLocAndCamera.mul(this.getPixelsBetweenLines());
+    const diffFromCanvas = Vec3.sub(this.centerOfCanvas, this.getPlanningGridCenterOnCanvas());
+    const totalDistanceFromCenter = Vec3.add(diffFromCanvas, diffConvertedToPixels);
+
+    // How wide is the half?
+    return totalDistanceFromCenter;
+  }
+
+  /**
+   * Figure out where the camera's snapping point is in relation to the planning grid
+   * @returns Planning grid coords for where camera should snap
+   */
   private getPlanningGridCameraLocation(): Vec3 {
     return this.camera.position.div(this.getPixelsBetweenLines()).floor();
   }
@@ -159,12 +280,10 @@ export class GridRenderer {
    * @returns
    */
   private getPlanningGridCenterOnCanvas(): Vec3 {
-    // Figure out where the camera's snapping point is in relation to the planning grid
     const cameraPlanningGridCenter = this.getPlanningGridCameraLocation();
 
-    // Figure out how many pixels the grid translates to for when we need to find the drawing
-    // start point
-    const gridCenterPixelAmount = cameraPlanningGridCenter.mul(this.getPixelsBetweenLines()); // -> [-615, -825]
+    // Figure out how many pixels the grid translates to for when we need to find the drawing start point
+    const gridCenterPixelAmount = cameraPlanningGridCenter.mul(this.getPixelsBetweenLines());
 
     // How many pixels is the current snapping point off from the camera position
     const offsetFromCamera = Vec3.sub(this.camera.position, gridCenterPixelAmount);
@@ -173,6 +292,23 @@ export class GridRenderer {
     const localGridCanvasCenter = Vec3.sub(this.centerOfCanvas, offsetFromCamera);
 
     return localGridCanvasCenter;
+  }
+
+  /**
+   * Given a position on the canvas, get the planning grid cell it would snap to
+   * @param pos Position to test from
+   * @returns
+   */
+  public getPlanningGridLocation(pos: Vec3): Vec3 {
+    const gridCell = this.getSnapGridCell(pos);
+
+    if (gridCell == null) {
+      throw new Error(
+        `Unable to find a planning grid location from the following canvas coordinates - X:${pos.x} Y:${pos.y}`
+      );
+    }
+
+    return gridCell.planningGridLocation;
   }
 
   /**
@@ -186,10 +322,11 @@ export class GridRenderer {
   }
 
   /**
-   * Given a position, find where it should snap to
-   * @param xpos
+   * Give a position, get the grid cell that would apply
+   * @param pos
+   * @returns
    */
-  private getSnapPosition(pos: Vec3): Vec3 | null {
+  private getSnapGridCell(pos: Vec3): GridCell | null {
     let lastColumn: GridCell[] | null = null;
 
     for (const column of this.scene) {
@@ -227,7 +364,7 @@ export class GridRenderer {
       foundCell = cell;
     }
 
-    return foundCell?.canvasLocation ?? null;
+    return foundCell ?? null;
   }
 
   public printColumnNumbers(): void {
@@ -250,25 +387,17 @@ export class GridRenderer {
     });
   }
 
-  private renderSelectedBuildable(image: CanvasImageSource, coords: Vec3) {
-    const snapPos = this.getSnapPosition(coords);
-
-    if (snapPos == null) {
+  private renderSelectedBuildable() {
+    if (!this.currentlySelectedItem) {
       return;
     }
-
-    const displayWidth = ((image.width as number) / this.pixelsPerGrid) * this.getPixelsBetweenLines();
-    const displayHeight = ((image.height as number) / this.pixelsPerGrid) * this.getPixelsBetweenLines();
-
-    this.context.globalAlpha = 0.5;
-    this.context.drawImage(image, snapPos.x, snapPos.y, displayWidth, displayHeight);
-    this.context.globalAlpha = 1;
+    this.drawPlacedItem(this.currentlySelectedItem, 0.5);
   }
 
   /**
    * Renders the current scene onto the canvas
    */
-  public render(image?: CanvasImageSource, coords?: Vec3): void {
+  public render(): void {
     this.clear();
     this.buildScene();
     this.drawGrid(1, '#2f3b54');
@@ -276,9 +405,34 @@ export class GridRenderer {
     this.printColumnNumbers();
     this.printRowNumbers();
 
-    if (image && coords) {
-      this.renderSelectedBuildable(image, coords);
+    this.showPlacedItemsInScene();
+    this.renderSelectedBuildable();
+  }
+
+  private showPlacedItemsInScene(): void {
+    const placedBuildables = this.planningGrid.getAllInArea(this.planningGridBounds);
+    placedBuildables.forEach((item) => this.drawPlacedItem(item));
+  }
+
+  public updateSelectedBuildable(placeable: Placeable | null): void {
+    if (!placeable) {
+      this.currentlySelectedItem = null;
+      return;
     }
+
+    this.currentlySelectedItem = new PlacedItem(placeable);
+  }
+
+  /**
+   * Updates the location of the currently selected buildable so it follows the mouse correctly
+   * @param loc Where on the canvas the mouse currently is
+   */
+  public updateSelectedBuildableLocation(loc: Vec3): void {
+    if (!this.currentlySelectedItem) {
+      return;
+    }
+
+    this.currentlySelectedItem.position = this.getPlanningGridLocation(loc);
   }
 
   private writeText(text: string, position: Vec3, color = '#bae67e') {

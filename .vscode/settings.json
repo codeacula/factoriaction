@@ -1,4 +1,7 @@
 {
   "eslint.validate": ["typescript"],
-  "files.eol": "\n"
+  "files.eol": "\n",
+  "typescript.preferences.quoteStyle": "single",
+  "javascript.preferences.quoteStyle": "single",
+  "editor.formatOnSave": true
 }
