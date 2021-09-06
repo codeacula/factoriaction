@@ -9,8 +9,8 @@ export class PlacedItem {
     this.boundingBox = BoundingBox.fromSize(placeable.position, new Vec3(this.buildable.width, this.buildable.height));
   }
 
-  private boundingBox: BoundingBox;
-  private buildable: Buildable;
+  public boundingBox: BoundingBox;
+  public buildable: Buildable;
   public image: CanvasImageSource;
   public position: Vec3;
 

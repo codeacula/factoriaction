@@ -18,9 +18,6 @@ export default defineComponent({
       required: true,
     },
   },
-  setup() {
-    console.log('buildableitembutton setup');
-  },
 });
 </script>
 
