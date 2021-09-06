@@ -44,7 +44,7 @@ export class PlanningBoardController {
 
   public cancelSelection(): void {
     this.currentlySelectedPlaceable = null;
-    this.gridRenderer.currentlySelectedItem = null;
+    this.gridRenderer.updateSelectedBuildable(null);
     this.render();
   }
 
@@ -172,6 +172,7 @@ export class PlanningBoardController {
       image: this.imageCache.get(buildable.name) as CanvasImageSource,
       position: new Vec3(),
     };
+    this.gridRenderer.updateSelectedBuildable(this.currentlySelectedPlaceable);
   }
 
   private sendAction(action: PlanningAction) {
@@ -225,6 +226,7 @@ export class PlanningBoardController {
    * @param pos The canvas location to find the planning grid coordinates from
    */
   private updateSelectedItem(pos: Vec3): void {
-    this.gridRenderer.updateBuildableLocation(pos);
+    this.gridRenderer.updateSelectedBuildableLocation(pos);
+    this.render();
   }
 }
