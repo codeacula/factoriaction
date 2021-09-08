@@ -1,5 +1,6 @@
 import { Buildable, Placeable, Vec3 } from '.';
 import { BoundingBox } from './BoundingBox';
+import { Rotation } from './Rotation';
 
 export class PlacedItem {
   constructor(placeable: Placeable) {
@@ -13,6 +14,7 @@ export class PlacedItem {
   public buildable: Buildable;
   public image: CanvasImageSource;
   public position: Vec3;
+  public rotation = Rotation.Down;
 
   /**
    * Does the placed item contain the provided planning grid unit within its bounding box

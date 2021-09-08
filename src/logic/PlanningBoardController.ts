@@ -6,6 +6,7 @@ import { GridCamera } from './GridCamera';
 import { GridRenderer } from './GridRenderer';
 import { MouseButtons } from './MouseButtons';
 import { PlanningGrid } from './PlanningGrid';
+import { Rotation } from './Rotation';
 import { Vec3 } from './Vec3';
 
 function convertToVec3(ev: MouseEvent | WheelEvent): Vec3 {
@@ -15,6 +16,7 @@ function convertToVec3(ev: MouseEvent | WheelEvent): Vec3 {
 enum States {
   None,
   Dragging,
+  Placing,
   Rotating,
 }
 
@@ -82,9 +84,11 @@ export class PlanningBoardController {
           buildable: this.currentlySelectedPlaceable.buildable,
           image: this.currentlySelectedPlaceable.image,
           position: mouseGridPos,
+          rotation: Rotation.Down,
         };
 
         this.sendAction(new PlaceBuildable(placeable));
+        this.currentState = States.Placing;
         this.render();
       }
     } else if (ev.button == MouseButtons.Right) {
@@ -100,6 +104,8 @@ export class PlanningBoardController {
     if (this.currentState == States.Dragging) {
       this.gridCamera.mouseDragged(eventLoc);
       this.render();
+    } else if (this.currentState == States.Placing) {
+      console.log('Is placing');
     }
 
     if (this.currentlySelectedPlaceable) {
@@ -114,6 +120,8 @@ export class PlanningBoardController {
       this.providedCanvas.style.cursor = 'auto';
       this.currentState = States.None;
       ev.preventDefault();
+    } else if (ev.button == MouseButtons.Left && this.currentState == States.Placing) {
+      this.currentState = States.None;
     }
   }
 
@@ -177,6 +185,7 @@ export class PlanningBoardController {
       buildable,
       image: this.imageCache.get(buildable.name) as CanvasImageSource,
       position: new Vec3(),
+      rotation: Rotation.Down,
     };
     this.gridRenderer.updateSelectedBuildable(this.currentlySelectedPlaceable);
   }
