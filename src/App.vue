@@ -3,15 +3,14 @@
   nav.navigation
     router-link(:to='{ name: "Home" }') Home
     router-link(:to='{ name: "About" }') About
-    a(href='#' @click='showBuildMenu()') Build (Q)
+    a.show-build-menu(href='#' @click='showBuildMenu()') Build (Q)
     a(href='#' @click='showHelpMenu()') Help
   router-view.main-content
   HelpMenu(v-show='shouldShowHelpMenu' @close='closeHelpMenu()')
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/runtime-core';
-import { ref } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 import HelpMenu from '@/components/HelpMenu.vue';
 
