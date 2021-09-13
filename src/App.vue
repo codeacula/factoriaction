@@ -4,7 +4,7 @@
     router-link(:to='{ name: "Home" }') Home
     router-link(:to='{ name: "About" }') About
     a.show-build-menu(href='#' @click='showBuildMenu()') Build (Q)
-    a(href='#' @click='showHelpMenu()') Help
+    a.show-help-menu(href='#' @click='showHelpMenu()') Help
   router-view.main-content
   HelpMenu(v-show='shouldShowHelpMenu' @close='closeHelpMenu()')
 </template>

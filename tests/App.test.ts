@@ -1,4 +1,5 @@
 import { mount, VueWrapper } from '@vue/test-utils';
+import { nextTick } from 'vue';
 import router from '@/router';
 import App from '@/App.vue';
 import HelpMenu from '@/components/HelpMenu.vue';
@@ -18,13 +19,15 @@ describe('App.vue', () => {
     instance = mount(App, { global: { plugins: [router] } });
   });
 
-  it('shows the help menu', () => {
-    const component = instance.getComponent(HelpMenu);
-    expect(component.isVisible()).toBeFalsy();
+  it('shows the help menu', async () => {
+    const helpMenuComponent = instance.findComponent(HelpMenu);
+    expect(helpMenuComponent.isVisible()).toBeFalsy();
 
-    const buildMenuLink = instance.get('.show-build-menu');
-    buildMenuLink.trigger('click');
+    const helpMenuLink = instance.get('.show-help-menu');
+    helpMenuLink.trigger('click');
 
-    expect(component.isVisible()).toBeTruthy();
+    await nextTick();
+
+    expect(helpMenuComponent.isVisible()).toBeTruthy();
   });
 });
