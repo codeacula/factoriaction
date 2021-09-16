@@ -53,11 +53,11 @@ export class GridRenderer {
     const pixelsBetweenLines = this.getPixelsBetweenLines();
 
     // Figure out where on the canvas the grid will start
-    const topLeft = canvasStartingPoint.mod(pixelsBetweenLines);
+    const topLeft = canvasStartingPoint.mod(pixelsBetweenLines); // The grid's top left starting point on the canvas
     const totalUnits = new Vec3(
       Math.floor(this.canvas.width / pixelsBetweenLines),
       Math.floor(this.canvas.height / pixelsBetweenLines)
-    );
+    ); // How many total units are there on this grid?
 
     // Where is the top left point at on the planning grid?
     const diffBetweenTopLeftAndCenter = Vec3.sub(canvasStartingPoint, topLeft);
@@ -113,6 +113,11 @@ export class GridRenderer {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
+  /**
+   * Draws the placed item on the screen, determining offsets where appropriate
+   * @param item
+   * @param opacity
+   */
   private drawPlacedItem(item: PlacedItem, opacity = 1) {
     const cell = this.getCellByPlanningGrid(item.position);
 
