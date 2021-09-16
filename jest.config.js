@@ -3,6 +3,7 @@ module.exports = {
   collectCoverage: true,
   collectCoverageFrom: ['src/**/*.ts', 'src/**/*.vue'],
   coverageDirectory: 'coverage',
+  coveragePathIgnorePatterns: ['<rootDir>/src/main.ts', '<rootDir>/src/registerServiceWorker.ts'],
   transform: {
     '^.+\\.vue$': 'vue-jest',
   },
