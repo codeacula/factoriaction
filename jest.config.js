@@ -12,6 +12,7 @@ module.exports = {
       statements: 100,
     },
   },
+  setupFiles: ['jest-canvas-mock'],
   transform: {
     '^.+\\.vue$': 'vue-jest',
   },
