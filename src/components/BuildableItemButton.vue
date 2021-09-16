@@ -12,6 +12,11 @@ import { PropType } from 'vue';
 import { Buildable } from '@/logic';
 
 export default defineComponent({
+  emits: {
+    click: () => {
+      return true;
+    },
+  },
   props: {
     item: {
       type: Object as PropType<Buildable>,

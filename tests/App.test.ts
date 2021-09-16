@@ -1,5 +1,4 @@
 import { mount, VueWrapper } from '@vue/test-utils';
-import { nextTick } from 'vue';
 import router from '@/router';
 import App from '@/App.vue';
 import HelpMenu from '@/components/HelpMenu.vue';
@@ -19,15 +18,26 @@ describe('App.vue', () => {
     instance = mount(App, { global: { plugins: [router] } });
   });
 
-  it('shows the help menu', async () => {
+  it('shows and closes the help menu', async () => {
     const helpMenuComponent = instance.findComponent(HelpMenu);
     expect(helpMenuComponent.isVisible()).toBeFalsy();
 
     const helpMenuLink = instance.get('.show-help-menu');
-    helpMenuLink.trigger('click');
-
-    await nextTick();
+    await helpMenuLink.trigger('click');
 
     expect(helpMenuComponent.isVisible()).toBeTruthy();
+
+    await helpMenuComponent.vm.$emit('close');
+
+    expect(helpMenuComponent.isVisible()).toBeFalsy();
+  });
+
+  it('sends a keyboard event when you press the build menu button in the nav', () => {
+    jest.spyOn(window, 'dispatchEvent');
+
+    const helpMenuLink = instance.get('.show-build-menu');
+    helpMenuLink.trigger('click');
+
+    expect(window.dispatchEvent).toHaveBeenCalledWith(new KeyboardEvent('keydown', { key: 'q' }));
   });
 });
