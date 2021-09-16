@@ -3,7 +3,6 @@ import BuildMenu from '@/components/BuildMenu.vue';
 import BuildableItemButton from '@/components/BuildableItemButton.vue';
 import { Buildable } from '@/logic';
 import { Tabs } from '@/components/Tabs';
-import { nextTick } from 'vue';
 
 const buildables = [
   {
