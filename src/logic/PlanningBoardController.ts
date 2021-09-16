@@ -6,10 +6,18 @@ import { GridCamera } from './GridCamera';
 import { GridRenderer } from './GridRenderer';
 import { MouseButtons } from './MouseButtons';
 import { PlanningGrid } from './PlanningGrid';
+import { Rotation } from './Rotation';
 import { Vec3 } from './Vec3';
 
 function convertToVec3(ev: MouseEvent | WheelEvent): Vec3 {
   return new Vec3(ev.offsetX, ev.offsetY);
+}
+
+enum States {
+  None,
+  Dragging,
+  Placing,
+  Rotating,
 }
 
 export class PlanningBoardController {
@@ -24,9 +32,9 @@ export class PlanningBoardController {
   private actionQueue: PlanningAction[] = [];
   private canvasParent!: HTMLElement | null;
   private currentlySelectedPlaceable: Placeable | null = null;
+  private currentState = States.None;
   private gridCamera = new GridCamera();
   private gridRenderer: GridRenderer;
-  private isDraggingCamera = false;
   private planningGrid = new PlanningGrid();
   private providedCanvas!: HTMLCanvasElement;
   private imageCache: Map<string, CanvasImageSource> = new Map();
@@ -76,24 +84,28 @@ export class PlanningBoardController {
           buildable: this.currentlySelectedPlaceable.buildable,
           image: this.currentlySelectedPlaceable.image,
           position: mouseGridPos,
+          rotation: Rotation.Down,
         };
 
         this.sendAction(new PlaceBuildable(placeable));
+        this.currentState = States.Placing;
         this.render();
       }
     } else if (ev.button == MouseButtons.Right) {
       this.providedCanvas.style.cursor = 'grab';
       this.gridCamera.startDragging(eventLoc);
-      this.isDraggingCamera = true;
+      this.currentState = States.Dragging;
       ev.preventDefault();
     }
   }
 
   private onMouseMove(ev: MouseEvent): void {
     const eventLoc = convertToVec3(ev);
-    if (this.isDraggingCamera) {
+    if (this.currentState == States.Dragging) {
       this.gridCamera.mouseDragged(eventLoc);
       this.render();
+    } else if (this.currentState == States.Placing) {
+      console.log('Is placing');
     }
 
     if (this.currentlySelectedPlaceable) {
@@ -106,8 +118,10 @@ export class PlanningBoardController {
     // Right mouse button
     if (ev.button == MouseButtons.Right) {
       this.providedCanvas.style.cursor = 'auto';
-      this.isDraggingCamera = false;
+      this.currentState = States.None;
       ev.preventDefault();
+    } else if (ev.button == MouseButtons.Left && this.currentState == States.Placing) {
+      this.currentState = States.None;
     }
   }
 
@@ -171,6 +185,7 @@ export class PlanningBoardController {
       buildable,
       image: this.imageCache.get(buildable.name) as CanvasImageSource,
       position: new Vec3(),
+      rotation: Rotation.Down,
     };
     this.gridRenderer.updateSelectedBuildable(this.currentlySelectedPlaceable);
   }

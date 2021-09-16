@@ -8,6 +8,10 @@ export class PlanningGrid {
     return this.placedItems.filter((item) => item.inside(area));
   }
 
+  public getLastItem(): PlacedItem {
+    return this.placedItems[this.placedItems.length - 1];
+  }
+
   public place(placeable: Placeable): void {
     this.placedItems.push(new PlacedItem(placeable));
   }

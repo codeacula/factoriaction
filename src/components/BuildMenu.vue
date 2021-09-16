@@ -8,7 +8,12 @@
     main.builder-box
       nav.builder-nav
         ul.builder-tab-list
-          li.builder-tab(v-for='tab in Tabs', :class='{ active: currentTab == tab }' @click='makeActive(tab)') {{ tab.toString() }}
+          li.builder-tab(
+            v-for='tab in Tabs',
+            :class='{ active: currentTab == tab }'
+            @click='makeActive(tab)',
+            :data-tabtype='tab'
+          ) {{ tab.toString() }}
       .builder-content
         .search-box
         .item-list-wrapper
@@ -17,18 +22,18 @@
             ul.item-list
               BuildableItemButton.item(
                 v-for='item in getItemsByGroup(group)',
+                :data-itemname='item.name',
                 :item='item'
-                @click='$emit("buildable-selected", item)'
+                @click='selectBuildable(item)'
               )
 </template>
 
 <script lang="ts">
 import { Buildable } from '@/logic';
 import { computed, defineComponent } from '@vue/runtime-core';
-import { ref } from 'vue';
+import { PropType, ref } from 'vue';
 
 import BuildableItemButton from '@/components/BuildableItemButton.vue';
-import buildables from '@/data/buildables.json';
 import { Tabs } from './Tabs';
 
 export default defineComponent({
@@ -38,15 +43,21 @@ export default defineComponent({
     'buildable-selected': (buildable: Buildable) => buildable,
     close: () => true,
   },
-  setup() {
+  props: {
+    buildables: {
+      type: Object as PropType<Buildable[]>,
+      required: true,
+    },
+  },
+  setup(props, { emit }) {
     const currentTab = ref(Tabs.special);
 
     const getItemsByGroup = (groupName: string): Buildable[] => {
-      return buildables
+      return props.buildables
         .filter((x) => x.tab == currentTab.value.toString() && x.groupName == groupName)
         .sort((a, b) => {
           if (a.displayOrder == b.displayOrder) {
-            return 0;
+            throw new Error('Two buildables have the same displayOrder');
           }
 
           return (a.displayOrder as number) < (b.displayOrder as number) ? -1 : 1;
@@ -56,7 +67,7 @@ export default defineComponent({
     const groups = computed(() => {
       return Array.from(
         new Set(
-          buildables
+          props.buildables
             .filter((x) => x.tab == currentTab.value && x.displayOrder != null && x.groupName != null)
             .map((x) => x.groupName as string)
             .sort()
@@ -64,11 +75,15 @@ export default defineComponent({
       );
     });
 
-    const makeActive = (category: Tabs) => {
+    const makeActive = (category: Tabs): void => {
       currentTab.value = category;
     };
 
-    return { currentTab, groups, getItemsByGroup, makeActive, Tabs };
+    const selectBuildable = (buildable: Buildable): void => {
+      emit('buildable-selected', buildable);
+    };
+
+    return { currentTab, groups, getItemsByGroup, makeActive, selectBuildable, Tabs };
   },
 });
 </script>

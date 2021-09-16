@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 export enum MouseButtons {
   Left = 0,
   Middle = 1,
