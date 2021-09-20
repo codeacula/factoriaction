@@ -46,9 +46,7 @@ export default defineComponent({
 
     onMounted(() => {
       window.addEventListener('keydown', showBuildMenu);
-      if (planner.value) {
-        planningBoard.value = new PlanningBoardController(planner.value as HTMLCanvasElement);
-      }
+      planningBoard.value = new PlanningBoardController(planner.value as HTMLCanvasElement);
     });
 
     onUnmounted(() => {
