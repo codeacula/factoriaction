@@ -1,4 +1,4 @@
-import { PlanningAction } from '.';
+import { PlanningAction } from './PlanningAction';
 import { Placeable } from '..';
 import { ActionInjectables } from '../ActionInjectables';
 
