@@ -32,14 +32,18 @@ export default defineComponent({
       shouldShowBuildMenu.value = false;
     };
 
+    const getController = (): PlanningBoardController => {
+      return planningBoard.value as PlanningBoardController;
+    };
+
     const selectBuildable = (buildable: Buildable) => {
       shouldShowBuildMenu.value = false;
-      planningBoard.value?.selectBuildable(buildable);
+      getController().selectBuildable(buildable);
     };
 
     const showBuildMenu = (ev: KeyboardEvent) => {
       if (ev.key == 'q') {
-        planningBoard.value?.cancelSelection();
+        getController().cancelSelection();
         shouldShowBuildMenu.value = true;
       }
     };

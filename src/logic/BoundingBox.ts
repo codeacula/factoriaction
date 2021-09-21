@@ -18,7 +18,7 @@ export class BoundingBox {
       return false;
     }
 
-    if (this.from.y != compareTo.from.y || this.from.y != compareTo.from.y) {
+    if (this.to.x != compareTo.to.x || this.to.y != compareTo.to.y) {
       return false;
     }
 
@@ -31,7 +31,7 @@ export class BoundingBox {
 
   public touches(boundingBox: BoundingBox): boolean {
     // Top left and bottom right corners
-    if (boundingBox.contains(this.from) || boundingBox.contains(this.to)) {
+    if (this.contains(boundingBox.from) || this.contains(boundingBox.to)) {
       return true;
     }
 
