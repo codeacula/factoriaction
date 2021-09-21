@@ -61,6 +61,11 @@ describe('BuildMenu', () => {
 
   describe('menu sorting', () => {
     it("throws an error when there's two buildables with the same sorting order", () => {
+      // Vue will throw an error here because there's an unhandled exception in the code, but that's the result we want.
+      // This code squelches it for this test only
+      jest.spyOn(console, 'warn').mockImplementation(() => {
+        return;
+      });
       const testData = [
         {
           displayOrder: 1,
