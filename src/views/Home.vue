@@ -4,11 +4,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import PlannerCanvas from "@/components/PlannerCanvas.vue";
+import { defineComponent } from 'vue';
+import PlannerCanvas from '@/components/PlannerCanvas.vue';
 
 export default defineComponent({
-  name: "Home",
+  name: 'Home',
   components: {
     PlannerCanvas,
   },

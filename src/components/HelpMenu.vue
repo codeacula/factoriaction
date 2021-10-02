@@ -1,5 +1,5 @@
 <template lang="pug">
-.help-menu(@click="$emit('close')")
+.help-menu(@click='$emit("close")')
   .help-menu-content
     h1 Factoriaction Help
     p
@@ -29,15 +29,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent } from '@vue/runtime-core';
 
 export default defineComponent({
-  emits: ["close"],
+  emits: ['close'],
 });
 </script>
 
 <style lang="scss">
-@import "@/sass/main.scss";
+@import '@/sass/main.scss';
 
 .help-menu {
   align-items: center;

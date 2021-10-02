@@ -1,0 +1,8 @@
+{
+  "eslint.validate": ["typescript"],
+  "files.eol": "\n",
+  "typescript.preferences.quoteStyle": "single",
+  "javascript.preferences.quoteStyle": "single",
+  "editor.formatOnSave": true,
+  "jest.showCoverageOnLoad": true
+}
