@@ -2,23 +2,31 @@ import { Vec3 } from '.';
 
 export class BoundingBox {
   constructor(from: Vec3, to: Vec3) {
-    this.from = from;
-    this.to = to;
+    this._from = from;
+    this._to = to;
   }
 
-  private from: Vec3;
-  private to: Vec3;
+  private _from: Vec3;
+  private _to: Vec3;
+
+  public get from(): Vec3 {
+    return this._from.copy();
+  }
+
+  public get to(): Vec3 {
+    return this._to.copy();
+  }
 
   public contains(point: Vec3): boolean {
-    return point.x >= this.from.x && point.x <= this.to.x && point.y >= this.from.y && point.y < this.to.y;
+    return point.x >= this._from.x && point.x <= this._to.x && point.y >= this._from.y && point.y < this._to.y;
   }
 
   public equal(compareTo: BoundingBox): boolean {
-    if (this.from.x != compareTo.from.x || this.from.y != compareTo.from.y) {
+    if (this._from.x != compareTo._from.x || this._from.y != compareTo._from.y) {
       return false;
     }
 
-    if (this.to.x != compareTo.to.x || this.to.y != compareTo.to.y) {
+    if (this._to.x != compareTo._to.x || this._to.y != compareTo._to.y) {
       return false;
     }
 
@@ -31,14 +39,14 @@ export class BoundingBox {
 
   public touches(boundingBox: BoundingBox): boolean {
     // Top left and bottom right corners
-    if (this.contains(boundingBox.from) || this.contains(boundingBox.to)) {
+    if (this.contains(boundingBox._from) || this.contains(boundingBox._to)) {
       return true;
     }
 
     // Top right and bottom left corners
     if (
-      boundingBox.contains(new Vec3(this.from.x, this.to.y)) ||
-      boundingBox.contains(new Vec3(this.to.x, this.from.y))
+      boundingBox.contains(new Vec3(this._from.x, this._to.y)) ||
+      boundingBox.contains(new Vec3(this._to.x, this._from.y))
     ) {
       return true;
     }

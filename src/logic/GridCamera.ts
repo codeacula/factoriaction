@@ -1,12 +1,43 @@
+import { BoundingBox } from './BoundingBox';
+import { CurrentView } from './CurrentView';
 import { Vec3 } from './Vec3';
 
 export class GridCamera {
+  public canvasDimensions = new Vec3();
   private dragCameraStart = new Vec3();
   private dragCursorStart = new Vec3();
   private movementIncrement = 0.5;
   private _position = new Vec3(); // The position of the camera on the virtual canvas
+  private sizeOfUnitInPixels = 15;
   private zoomCeiling = 0.5; // We need a ceiling for zooming out because if we hit 0 app crashes
   private zoomFloor = 6; // Don't need to zoom in forever
+
+  public get currentView(): CurrentView {
+    const halfDimensions = this.canvasDimensions.div(2);
+
+    const localPosition = new BoundingBox(Vec3.sub(new Vec3(), halfDimensions), Vec3.add(new Vec3(), halfDimensions));
+
+    const virtualCanvas = new BoundingBox(
+      Vec3.sub(this._position, halfDimensions),
+      Vec3.add(this._position, halfDimensions)
+    );
+
+    const planningGrid = new BoundingBox(
+      virtualCanvas.from.div(this.sizeOfUnitInPixels).floor(),
+      virtualCanvas.to.div(this.sizeOfUnitInPixels).floor()
+    );
+
+    const localGrid = new BoundingBox(
+      localPosition.from.div(this.sizeOfUnitInPixels).floor(),
+      localPosition.to.div(this.sizeOfUnitInPixels).floor()
+    );
+
+    return {
+      localGrid,
+      planningGrid,
+      virtualCanvas,
+    };
+  }
 
   /**
    * Returns a copy of the camera's current position

@@ -149,6 +149,7 @@ export class PlanningBoardController {
     }
 
     this.gridRenderer.calculateCenterOfCanvas();
+    this.gridCamera.canvasDimensions = new Vec3(this.providedCanvas.width, this.providedCanvas.height);
     this.render();
   }
 
