@@ -128,9 +128,9 @@ export class PlanningBoardController {
   private onMouseWheel(ev: WheelEvent): void {
     const vec = convertToVec3(ev);
     if (ev.deltaY < 0) {
-      this.gridCamera.down(vec);
+      this.gridCamera.up();
     } else {
-      this.gridCamera.up(vec);
+      this.gridCamera.down();
     }
 
     this.updateSelectedItem(vec);
