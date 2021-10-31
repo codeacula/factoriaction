@@ -1,6 +1,9 @@
 import { Placeable, PlacedItem } from '.';
 import { BoundingBox } from './BoundingBox';
 
+/**
+ * Holds all of the placed items, along with ways to manage or query them
+ */
 export class PlanningGrid {
   private placedItems = new Array<PlacedItem>();
 

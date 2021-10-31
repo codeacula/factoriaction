@@ -2,6 +2,9 @@ import { BoundingBox } from './BoundingBox';
 import { CurrentView } from './CurrentView';
 import { Vec3 } from './Vec3';
 
+/**
+ * The viewport through which we view the grids
+ */
 export class GridCamera {
   public canvasDimensions = new Vec3();
   private dragCameraStart = new Vec3();

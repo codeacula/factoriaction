@@ -1,3 +1,6 @@
+/**
+ * A buildable item inside of Satisfactory, something that can be selected from the Build Menu in game and placed
+ */
 export interface Buildable {
   displayOrder: number;
   groupName: string;

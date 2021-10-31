@@ -1,5 +1,8 @@
 import { Vec3 } from '.';
 
+/**
+ * A 2D box based on a from and two point
+ */
 export class BoundingBox {
   constructor(from: Vec3, to: Vec3) {
     this._from = from;

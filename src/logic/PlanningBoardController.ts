@@ -20,6 +20,9 @@ enum States {
   Rotating,
 }
 
+/**
+ * Handles all the interaction between the Vue client and the logic backend
+ */
 export class PlanningBoardController {
   constructor(canvas: HTMLCanvasElement) {
     this.setupCanvas(canvas);
