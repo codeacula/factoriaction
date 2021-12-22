@@ -1,4 +1,20 @@
-## Development Requirements
+## Development
 
-- Have Docker and Docker Compose installed on your system
-- Have the Vue CLI installed if you plan on making updated to the packages `npm install -g @vue/cli@next`
+### Requirements
+
+- Node
+- Docker & Docker Compose
+
+### Recommended VS Code Extensions
+
+- [Docker](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker)
+- [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
+- [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+- [Sass](https://marketplace.visualstudio.com/items?itemName=Syler.sass-indented)
+- [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar)
+
+### Steps
+
+1. Run `npm install`
+1. Run `docker-compose build` at root
+1. Run `docker-compose up`

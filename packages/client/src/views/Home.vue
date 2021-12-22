@@ -8,7 +8,7 @@ import { defineComponent } from 'vue';
 import PlannerCanvas from '@/components/PlannerCanvas.vue';
 
 export default defineComponent({
-  name: 'Home',
+  name: 'HomeView',
   components: {
     PlannerCanvas,
   },
