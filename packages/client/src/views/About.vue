@@ -7,6 +7,15 @@
   p And, of course, all this is because of the #[a(href='https://www.satisfactorygame.com/' target='_blank') Satisfactor game].
 </template>
 
+<script lang="ts">
+import { defineComponent } from 'vue';
+
+export default defineComponent({
+  name: 'AboutView',
+  components: {},
+});
+</script>
+
 <style lang="scss" scoped>
 #about {
   flex-direction: column;
