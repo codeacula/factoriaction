@@ -8,5 +8,5 @@ services:
       - "8080:8080"
     container_name: client
     volumes:
-      - ./:${FACTORIACTION_PATH}/packages/client
-      - ${FACTORIACTION_PATH}/packages/client/node_modules
+      - ${FACTORIACTION_PATH}/packages/client/src:/app/src
+      - ${FACTORIACTION_PATH}/packages/client/node_modules:/app/node_modules
