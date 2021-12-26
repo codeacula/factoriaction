@@ -1,4 +1,8 @@
 {
+  "name": "factoriaction",
+  "version": "1.0.0",
+  "private": true,
+  "license": "MIT",
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.8.0",
     "@typescript-eslint/parser": "^5.8.0",
