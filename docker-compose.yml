@@ -9,4 +9,3 @@ services:
     container_name: client
     volumes:
       - ${FACTORIACTION_PATH}/packages/client/src:/app/src
-      - ${FACTORIACTION_PATH}/packages/client/node_modules:/app/node_modules
