@@ -1,4 +1,4 @@
-version: '3'
+version: '3.9'
 services:
   client:
     build:
@@ -8,4 +8,6 @@ services:
       - "8080:8080"
     container_name: client
     volumes:
-      - ${FACTORIACTION_PATH}/packages/client/src:/app/src
+      - type: bind
+        source: ./packages/client/src
+        target: /app/src
