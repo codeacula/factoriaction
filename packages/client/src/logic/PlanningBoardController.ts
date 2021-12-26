@@ -20,6 +20,9 @@ enum States {
   Rotating,
 }
 
+/**
+ * Handles all the interaction between the Vue client and the logic backend
+ */
 export class PlanningBoardController {
   constructor(canvas: HTMLCanvasElement) {
     this.setupCanvas(canvas);
@@ -128,9 +131,9 @@ export class PlanningBoardController {
   private onMouseWheel(ev: WheelEvent): void {
     const vec = convertToVec3(ev);
     if (ev.deltaY < 0) {
-      this.gridCamera.down(vec);
+      this.gridCamera.up();
     } else {
-      this.gridCamera.up(vec);
+      this.gridCamera.down();
     }
 
     this.updateSelectedItem(vec);
@@ -149,6 +152,7 @@ export class PlanningBoardController {
     }
 
     this.gridRenderer.calculateCenterOfCanvas();
+    this.gridCamera.canvasDimensions = new Vec3(this.providedCanvas.width, this.providedCanvas.height);
     this.render();
   }
 

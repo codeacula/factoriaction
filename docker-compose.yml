@@ -1,0 +1,11 @@
+version: '3'
+services:
+  client:
+    build:
+      context: ./packages/client
+      dockerfile: Dockerfile.dev
+    ports:
+      - "8080:8080"
+    container_name: client
+    volumes:
+      - ${FACTORIACTION_PATH}/packages/client/src:/app/src

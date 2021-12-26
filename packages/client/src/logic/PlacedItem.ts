@@ -2,6 +2,9 @@ import { Buildable, Placeable, Vec3 } from '.';
 import { BoundingBox } from './BoundingBox';
 import { Rotation } from './Rotation';
 
+/**
+ * An item that has been placed on a planning grid. Contains helper functions for comparing placed items
+ */
 export class PlacedItem {
   constructor(placeable: Placeable) {
     this.buildable = placeable.buildable;

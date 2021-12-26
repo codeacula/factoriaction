@@ -6,10 +6,6 @@ module.exports = {
   coveragePathIgnorePatterns: ['<rootDir>/src/main.ts', '<rootDir>/src/registerServiceWorker.ts'],
   coverageThreshold: {
     global: {
-      branches: 0,
-      functions: 0,
-      lines: 0,
-      statements: 0,
     },
   },
   setupFiles: ['jest-canvas-mock'],
