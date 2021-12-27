@@ -9,41 +9,28 @@
   HelpMenu(v-show='shouldShowHelpMenu' @close='closeHelpMenu()')
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue';
+<script setup lang="ts">
+import { ref } from 'vue';
 
 import HelpMenu from '@/components/HelpMenu.vue';
 
-export default defineComponent({
-  name: 'App',
-  components: { HelpMenu },
-  setup() {
-    const shouldShowHelpMenu = ref(false);
+const shouldShowHelpMenu = ref(false);
 
-    const closeHelpMenu = () => {
-      shouldShowHelpMenu.value = false;
-    };
+const closeHelpMenu = () => {
+  shouldShowHelpMenu.value = false;
+};
 
-    const showBuildMenu = () => {
-      window.dispatchEvent(new KeyboardEvent('keydown', { key: 'q' }));
-    };
+const showBuildMenu = () => {
+  window.dispatchEvent(new KeyboardEvent('keydown', { key: 'q' }));
+};
 
-    const showHelpMenu = () => {
-      shouldShowHelpMenu.value = true;
-    };
-
-    return {
-      closeHelpMenu,
-      showBuildMenu,
-      showHelpMenu,
-      shouldShowHelpMenu,
-    };
-  },
-});
+const showHelpMenu = () => {
+  shouldShowHelpMenu.value = true;
+};
 </script>
 
 <style lang="scss">
-@import '@/sass/main.scss';
+@import "@/sass/main.scss";
 
 .app-wrapper {
   display: grid;

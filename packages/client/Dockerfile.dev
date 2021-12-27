@@ -2,5 +2,5 @@ FROM node:14
 WORKDIR /app
 COPY *.json ./
 RUN yarn install
-EXPOSE 8080
-CMD ["yarn", "serve"]
+EXPOSE 3000
+CMD ["yarn", "dev"]
