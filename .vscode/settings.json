@@ -4,5 +4,6 @@
   "typescript.preferences.quoteStyle": "single",
   "javascript.preferences.quoteStyle": "single",
   "editor.formatOnSave": true,
-  "jest.showCoverageOnLoad": true
+  "jest.showCoverageOnLoad": true,
+  "eslint.packageManager": "yarn"
 }
