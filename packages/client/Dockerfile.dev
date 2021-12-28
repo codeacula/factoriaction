@@ -1,6 +1,6 @@
 FROM node:14
 WORKDIR /app
-COPY *.json ./
+COPY *.json *.config.js vite.config.ts index.html ./
 RUN yarn install
 EXPOSE 3000
 CMD ["yarn", "dev"]
